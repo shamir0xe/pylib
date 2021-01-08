@@ -221,6 +221,7 @@ class ArrayTools:
         return res
 
 class FileHandler:
+    @staticmethod
     def get_filenames(path=".", file_type=""):
         if not os.path.isdir(path):
             raise Exception('{} is not a directory'.format(path))

@@ -1,7 +1,7 @@
 import random
 from enum import Enum
-from buffer_io import (StandardInputReader, FileReader, append_to_file)
-from utils import (debug_text)
+from .buffer_io import (StandardInputReader, FileReader, append_to_file)
+from .utils import (debug_text)
 
 
 class StringTypes(Enum):
