@@ -5,7 +5,7 @@ import math
 import random
 from datetime import (datetime, timedelta)
 import time
-import buffer_io as IO
+from .buffer_io import (FileReader, FileWriter, BufferReader, StringBuffer)
 
 
 def delay(delay=0.):
@@ -237,7 +237,7 @@ class FileHandler:
         files = FileHandler.get_filenames(path=path, file_type=file_type)
         res = -1
         for f in files:
-            buffer_reader = IO.BufferReader(IO.StringBuffer(f),
+            buffer_reader = BufferReader(StringBuffer(f),
                                             delimiters=delimiters)
             number = None
             while not buffer_reader.end_of_buffer():
@@ -333,7 +333,7 @@ class Logger:
 
     def write_to_file(self, file_name):
         self.__check_active()
-        file_writer = IO.FileWriter(file_name)
+        file_writer = FileWriter(file_name)
         file_writer.write_line('[{:>22}] task logs'.format(self.__task_name))
         file_writer.write_line('[{:>22}]: {:02f}s'.format(
             'total time taken',
