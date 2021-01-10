@@ -1,5 +1,8 @@
 import enum
 
 class Errors(enum.Enum):
-    MissingParameters = 1
-    FileNotFound = 2
+    MissingParameters = 'MissingParameters'
+    FileNotFound = 'FileNotFound'
+    NotFound = '{}NotFound'
+    BadParser = 'BadParser'
+    PageNotFound = 'PageNotFound'
