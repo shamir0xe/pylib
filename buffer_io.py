@@ -74,7 +74,7 @@ class CharacterHandler:
         ord('\r'),
         ord('\b'),
         ord('\v'),
-        ord('\f'), 10, 32
+        ord('\f'),
     ]
 
     @staticmethod
@@ -126,7 +126,7 @@ class BufferReader:
     """
     string buffer parser class
     """
-    def __init__(self, input_buffer, delimiters=None, log_writer=None):
+    def __init__(self, input_buffer, delimiters=None, log_writer=None, exclude_delimiters=None):
         self.f = input_buffer
         self.__buff = ""
         self.__buff_position = 0
@@ -138,6 +138,11 @@ class BufferReader:
         if delimiters:
             for char in delimiters:
                 self.__delimiters.append(ord(char))
+        if exclude_delimiters:
+            for char in exclude_delimiters:
+                self.__delimiters = list(
+                    filter(lambda a: a != ord(char), self.__delimiters)
+                    )
         self.__log_writer = log_writer
 
     def is_space_char(self, character):

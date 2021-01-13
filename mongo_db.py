@@ -10,3 +10,7 @@ class Mongo:
     
     def get_db(self):
         return self.__db
+    
+    @staticmethod
+    def pymongo():
+        return pymongo
