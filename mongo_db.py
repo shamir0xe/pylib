@@ -5,7 +5,8 @@ class Mongo:
         url_string = "mongodb+srv://"
         url_string += "{}:{}@{}".format(username, password, server_url)
         url_string += "?retryWrites=true&w=majority"
-        self.__client = pymongo.MongoClient(url_string)
+        # self.__client = pymongo.MongoClient(url_string)
+        self.__client = pymongo.MongoClient('localhost', 27017)
         self.__db = self.__client["db_name"]
     
     def get_db(self):
