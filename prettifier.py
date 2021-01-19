@@ -1,10 +1,8 @@
 import random
 from enum import Enum
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-from PythonLibrary.buffer_io import (StandardInputReader, FileReader, append_to_file)
-from PythonLibrary.utils import (debug_text)
+from .buffer_io import (StandardInputReader, FileReader, append_to_file)
+from .utils import (debug_text)
 
 class StringTypes(Enum):
     Alphabet = 'alphabet'

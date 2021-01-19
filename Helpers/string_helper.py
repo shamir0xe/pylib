@@ -1,14 +1,15 @@
 from ..utils import debug_text
-import ..buffer_io as io
+from ..buffer_io import (BufferReader, StringBuffer)
 
 class StringHelper:
     @staticmethod
     def camel_to_snake(word):
+        # TODO
         pass
 
     @staticmethod
     def snake_to_camel(snake):
-        reader = io.BufferReader(io.StringBuffer(snake), delimiters='_')
+        reader = BufferReader(StringBuffer(snake), delimiters='_')
         camel = ''
         while not reader.end_of_buffer():
             token = reader.next_string()

@@ -67,24 +67,4 @@ class JsonParser:
                     if i + 1 >= len(tokens):
                         walker[token] = obj
                     walker = walker[token]
-            
-    @staticmethod
-    def merge(js_1, js_2):
-        res = {}
-        for key, value in js_2.items():
-            if key in js_1:
-                if isinstance(value, list):
-                    if isinstance(js_1[key], list):
-                        res[key] = js_1[key] + value
-                    else:
-                        res[key] = value
-                elif isinstance(value, dict):
-                    res[key] = JsonParser.merge(js_1[key], value)
-                else:
-                    res[key] = value
-            else:
-                res[key] = value
-        for key, value in js_1.items():
-            if not key in res:
-                res[key] = value
-        return res
+ 
