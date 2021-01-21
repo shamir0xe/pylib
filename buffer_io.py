@@ -32,7 +32,9 @@ class StandardInputBuffer:
         self.__end = False
 
     def __in(self):
-        return input() + "\n"
+        return sys.stdin.read(1)
+        # return sys.stdin.readline()
+        # return input() + "\n"
 
     def __load_buffer(self):
         self.__buff = ""
@@ -51,6 +53,7 @@ class StandardInputBuffer:
             res += self.__buff[self.__pos]
             count -= 1
             self.__pos += 1
+        # print('RESSS: {}'.format(res))
         return res
 
     def close(self):
@@ -196,6 +199,7 @@ class BufferReader:
             res += self.c
             self.c = self.__read_char()
             self.last_char = self.c
+            # print('[~~~~~]{}-{}'.format(self.c, ord(self.c)))
         return res
 
     def end_of_buffer(self):
