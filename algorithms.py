@@ -1,9 +1,8 @@
 import math
 import random
 from queue import (Queue, PriorityQueue)
-from node import Node
-from utils import debug_text
-import utils as Utils
+from .node import Node
+from .utils import (debug_text, Logger)
 from ortools.graph import pywrapgraph
 
 def LIS(arr, order=+1):
@@ -35,6 +34,35 @@ def LIS(arr, order=+1):
         u = par[u]
     return dp[uu], seq
 
+class MinCostFlow:
+    def __init__(self, n):
+        self.n = n
+        self.__maxflow = pywrapgraph.SimpleMinCostFlow()
+    
+    def add_edge(self, u, v, capacity, weight):
+        self.__maxflow.AddArcWithCapacityAndUnitCost(u, v, capacity, weight)
+
+    def add_supply(self, u, supply):
+        self.__maxflow.SetNodeSupply(u, supply)
+
+    def get_matched(self, u):
+        return self.__edges[u]
+
+    def solve(self):
+        self.__edges = [[] for _ in range(self.n)]
+        if self.__maxflow.Solve() == self.__maxflow.OPTIMAL:
+            self.total_cost = self.__maxflow.OptimalCost()
+            print('Minimum cost:', self.total_cost)
+            for i in range(self.__maxflow.NumArcs()):
+                u = self.__maxflow.Tail(i)
+                v = self.__maxflow.Head(i)
+                f = self.__maxflow.Flow(i)
+                if f > 0:
+                    self.__edges[u].append((v, f))
+        else:
+            print('There was an issue with the min cost flow input.')
+
+
 class MaxFlowEfficient:
     def __init__(self, n, random_order=False, order=None, logger=None):
         self.n = n
@@ -42,7 +70,7 @@ class MaxFlowEfficient:
         self.__reverse_map = [i for i in range(n)]
         self.cap = [[0 for j in range(n)] for i in range(n)]
         self.__edges = []
-        self.__logger = logger if not logger is None else Utils.Logger("MaxFlow")
+        self.__logger = logger if not logger is None else Logger("MaxFlow")
         if random_order:
             random.shuffle(self.__order)
         if not order is None:
@@ -85,7 +113,7 @@ class MaxFlow:
         self.cap = [[0 for j in range(n)] for i in range(n)]
         self.order = [i for i in range(n)]
         self.algorithm = algorithm
-        self.__logger = logger if not logger is None else Utils.Logger("MaxFlow")
+        self.__logger = logger if not logger is None else Logger("MaxFlow")
         if random_order:
             random.shuffle(self.order)
         if not order is None:
