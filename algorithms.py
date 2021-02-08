@@ -52,15 +52,17 @@ class MinCostFlow:
         self.__edges = [[] for _ in range(self.n)]
         if self.__maxflow.Solve() == self.__maxflow.OPTIMAL:
             self.total_cost = self.__maxflow.OptimalCost()
-            print('Minimum cost:', self.total_cost)
+            # print('Minimum cost:', self.total_cost)
             for i in range(self.__maxflow.NumArcs()):
                 u = self.__maxflow.Tail(i)
                 v = self.__maxflow.Head(i)
                 f = self.__maxflow.Flow(i)
                 if f > 0:
                     self.__edges[u].append((v, f))
+            return True
         else:
             print('There was an issue with the min cost flow input.')
+            return False
 
 
 class MaxFlowEfficient:
