@@ -1,5 +1,5 @@
 import os
-from PythonLibrary.buffer_io import FileReader
+from .buffer_io import FileReader, BufferReader, StringBuffer
 import json
 
 class File:
@@ -31,4 +31,32 @@ class File:
 
     def get_all_folders(self):
         pass
+
+    @staticmethod
+    def read_csv(directory, delimiter=','):
+        reader = FileReader(directory)
+        first = True
+        res, keys = [], []
+        while not reader.end_of_file():
+            line = reader.next_line()
+            line_reader = BufferReader(
+                StringBuffer(line), 
+                delimiters=delimiter, 
+                exclude_delimiters=' \n\r'
+            )
+            items = []
+            while not line_reader.end_of_buffer():
+                items.append(line_reader.next_string().strip())
+            if first:
+                first = False
+                keys = items
+            else:
+                row_items = {}
+                for i in range(len(keys)):
+                    row_items[keys[i]] = items[i]
+                res.append(row_items)
+        return res
+
+
+        
 
