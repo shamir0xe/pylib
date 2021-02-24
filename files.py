@@ -39,6 +39,7 @@ class File:
         res, keys = [], []
         while not reader.end_of_file():
             line = reader.next_line()
+            line = line.replace(',', ', ')
             line_reader = BufferReader(
                 StringBuffer(line), 
                 delimiters=delimiter, 
@@ -51,6 +52,7 @@ class File:
                 first = False
                 keys = items
             else:
+                items.extend([None] * (len(keys) - len(items)))
                 row_items = {}
                 for i in range(len(keys)):
                     row_items[keys[i]] = items[i]
