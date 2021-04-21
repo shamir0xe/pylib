@@ -42,6 +42,17 @@ def debug_text(*texts):
     the function for printing text
     just use % for extra arguments inside the string
     """
+    colors = {
+        'b': '\033[94m',
+        'c': '\033[96m',
+        'y': '\033[93m',
+        'B': '\033[1m',
+        'H': '\033[95m',
+        'U': '\033[4m',
+        'r': '\033[91m',
+        'g': '\033[92m',
+        'E': '\033[0m',
+    }
     debug = True
     if debug:
         arr = []
@@ -51,13 +62,20 @@ def debug_text(*texts):
             if type(texts[i]) is str:
                 res = ''
                 count = 0
+                j = 0
                 args = []
-                for char in texts[i]:
+                while j < len(texts[i]):
+                    char = texts[i][j]
                     if char == '%':
-                        res += '{}'
-                        count += 1
+                        if j + 1 < len(texts[i]) and texts[i][j + 1] in colors:
+                            res += colors[texts[i][j + 1]]
+                            j += 1
+                        else:
+                            res += '{}'
+                            count += 1
                     else:
                         res += char
+                    j += 1
                 if count > 0:
                     while count > 0:
                         i += 1

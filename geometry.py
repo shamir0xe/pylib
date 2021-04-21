@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math
 import random
 from .buffer_io import (BufferReader, StringBuffer)
@@ -176,6 +177,21 @@ class Geometry:
         def __eq__(self, other):
             return math.fabs(self.x - other.x) < Geometry.EPS and math.fabs(
                 self.y - other.y) < Geometry.EPS
+        
+        def sin(self) -> float:
+            return self.y / self.length()
+
+        def cos(self) -> float:
+            return self.x / self.length()
+
+        def subtract(self, p) -> Geometry.Point:
+            return Geometry.Point.sub(self, p)
+        
+        def addition(self, p) -> Geometry.Point:
+            return Geometry.Point.add(self, p)
+        
+        def cross(self, p) -> float:
+            return p.y * self.x - p.x * self.y
 
         @staticmethod
         def sub(p1, p2):
