@@ -7,7 +7,7 @@ class Mongo:
         url_string += "?retryWrites=true&w=majority"
         # self.__client = pymongo.MongoClient(url_string)
         self.__client = pymongo.MongoClient('localhost', 27017)
-        self.__db = self.__client["db_name"]
+        self.__db = self.__client[db_name]
     
     def get_db(self):
         return self.__db
