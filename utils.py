@@ -1,5 +1,6 @@
 import os
 import threading
+import sys
 from functools import wraps
 import math
 import random
@@ -92,7 +93,7 @@ def debug_text(*texts):
             if i > 0:
                 res += ', '
             res += '[{}]'
-        print(res.format(*arr), end='\r\n', flush=True)
+        print(res.format(*arr), end='\r\n', flush=True, file=sys.stderr)
 
 
 def check_server_response(server, response, message):
@@ -196,13 +197,13 @@ class Timer:
 
 
 class TerminalProcess:
-    def __init__(self, 
-        total_loops, 
-        prefix = '', 
-        suffix = '', 
-        decimals = 1, 
-        length = 100, 
-        fill = '█', 
+    def __init__(self,
+        total_loops,
+        prefix = '',
+        suffix = '',
+        decimals = 1,
+        length = 100,
+        fill = '█',
         print_end = "\r"
     ):
         """
@@ -236,7 +237,7 @@ class TerminalProcess:
         bar = self.fill * filledLength + '-' * (self.length - filledLength)
         print(f'\r{self.prefix} |{bar}| {percent}% {self.suffix}', end = self.print_end)
         # Print New Line on Complete
-        if self.iteration == self.total: 
+        if self.iteration == self.total:
             print()
 
     def clear(self):
