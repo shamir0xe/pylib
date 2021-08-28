@@ -243,7 +243,7 @@ class FileReader(BufferReader):
     """
     def __init__(self, file_name, **kwargs):
         if os.path.isfile(file_name):
-            super().__init__(open(file_name, "r+"), **kwargs)
+            super().__init__(open(file_name, "r"), **kwargs)
         else:
             super().__init__(StringBuffer(""))
 
