@@ -1,13 +1,26 @@
 import os.path
 import sys
+from abc import ABC
 
 FLUSH = "$#!$$"
 
 
-class StringBuffer:
+class Buffer(ABC):
+    def read(self):
+        pass
+
+    def write(self):
+        pass
+
+    def close(self):
+        pass
+
+
+class StringBuffer(Buffer):
     """
     Turn a string into buffer
     """
+
     def __init__(self, buff):
         self.buff = buff
         self.pos = 0
@@ -21,17 +34,15 @@ class StringBuffer:
             count -= 1
         return res
 
-    def close(self):
-        pass
 
-
-class StandardInputBuffer:
+class StandardInputBuffer(Buffer):
     def __init__(self):
         self.__buff = ""
         self.__pos = 0
         self.__end = False
 
-    def __in(self):
+    @staticmethod
+    def __in():
         return sys.stdin.read(1)
         # return sys.stdin.readline()
         # return input() + "\n"
@@ -40,7 +51,7 @@ class StandardInputBuffer:
         self.__buff = ""
         self.__pos = 0
         try:
-            self.__buff = self.__in()
+            self.__buff = StandardInputBuffer.__in()
         except:
             return ""
         return self.__buff
@@ -55,9 +66,6 @@ class StandardInputBuffer:
             self.__pos += 1
         # print('RESSS: {}'.format(res))
         return res
-
-    def close(self):
-        pass
 
 
 class CharacterTypes:
@@ -129,6 +137,7 @@ class BufferReader:
     """
     string buffer parser class
     """
+
     def __init__(self, input_buffer, delimiters=None, log_writer=None, exclude_delimiters=None):
         self.f = input_buffer
         self.__buff = ""
@@ -145,7 +154,7 @@ class BufferReader:
             for char in exclude_delimiters:
                 self.__delimiters = list(
                     filter(lambda a: a != ord(char), self.__delimiters)
-                    )
+                )
         self.__log_writer = log_writer
 
     def is_space_char(self, character):
@@ -241,6 +250,7 @@ class FileReader(BufferReader):
     """
     an utility class for reading files
     """
+
     def __init__(self, file_name, **kwargs):
         if os.path.isfile(file_name):
             super().__init__(open(file_name, "r"), **kwargs)
@@ -255,6 +265,7 @@ class BufferWriter:
     """
     writer buffer class for writing efficient into string buffer
     """
+
     def __init__(self):
         self.__buff = ""
 
@@ -275,6 +286,7 @@ class FileWriter(BufferWriter):
     """
     utility class for writing into files
     """
+
     def __init__(self, file_name, mode="w+"):
         super().__init__()
         self.f = open(file_name, mode)
