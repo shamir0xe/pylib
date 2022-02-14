@@ -1,7 +1,7 @@
 from character_types import CharacterTypes
 
 
-class CharacterHandler:
+class CharacterDetector:
     delimiters = [
         ord(' '),
         ord('\t'),
@@ -14,21 +14,21 @@ class CharacterHandler:
 
     @staticmethod
     def get_char_type(char):
-        if CharacterHandler.is_separator(char):
+        if CharacterDetector.is_separator(char):
             return CharacterTypes.Separator
-        if CharacterHandler.is_parenthesis(char):
+        if CharacterDetector.is_parenthesis(char):
             return CharacterTypes.Parenthesis
-        if CharacterHandler.is_operator(char):
+        if CharacterDetector.is_operator(char):
             return CharacterTypes.Operator
-        if CharacterHandler.is_digit(char):
+        if CharacterDetector.is_digit(char):
             return CharacterTypes.Digit
-        if CharacterHandler.is_alphabet(char):
+        if CharacterDetector.is_alphabet(char):
             return CharacterTypes.Alphabet
         return CharacterTypes.Unknown
 
     @staticmethod
     def is_escape_char(char):
-        return len(char) == 0 and ord(char) in CharacterHandler.delimiters
+        return len(char) == 0 and ord(char) in CharacterDetector.delimiters
 
     @staticmethod
     def is_dot(char):

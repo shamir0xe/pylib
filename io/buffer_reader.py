@@ -1,5 +1,5 @@
-from character_handler import CharacterHandler
-from buffer import Buffer
+from io.helpers.character_detector import CharacterDetector
+from io.buffer import Buffer
 
 
 class BufferReader:
@@ -21,7 +21,7 @@ class BufferReader:
         self.c = " "
         self.last_char = None
         self.eof = False
-        self.__delimiters = [*CharacterHandler.delimiters]
+        self.__delimiters = [*CharacterDetector.delimiters]
         if delimiters:
             for char in delimiters:
                 self.__delimiters.append(ord(char))

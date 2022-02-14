@@ -246,11 +246,11 @@ class StandardInputReader(BufferReader):
         super().__init__(StandardInputBuffer(), log_writer=log_writer)
 
 
+
 class FileReader(BufferReader):
     """
     an utility class for reading files
     """
-
     def __init__(self, file_name, **kwargs):
         if os.path.isfile(file_name):
             super().__init__(open(file_name, "r"), **kwargs)
@@ -259,27 +259,6 @@ class FileReader(BufferReader):
 
     def end_of_file(self):
         return self.end_of_buffer()
-
-
-class BufferWriter:
-    """
-    writer buffer class for writing efficient into string buffer
-    """
-
-    def __init__(self):
-        self.__buff = ""
-
-    def write(self, string):
-        self.__buff += str(string)
-
-    def write_line(self, string):
-        self.write(string)
-        self.write("\n")
-
-    def flush_buffer(self):
-        res = self.__buff
-        self.__buff = ""
-        return res
 
 
 class FileWriter(BufferWriter):
@@ -292,7 +271,7 @@ class FileWriter(BufferWriter):
         self.f = open(file_name, mode)
 
     def flush(self):
-        self.f.write(self.flush_buffer())
+        self.f.write(super().flush())
 
     def close(self):
         self.flush()
