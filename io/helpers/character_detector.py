@@ -1,4 +1,4 @@
-from character_types import CharacterTypes
+from .character_types import CharacterTypes
 
 
 class CharacterDetector:

@@ -1,5 +1,5 @@
 import sys
-from io.buffer import Buffer
+from .buffer import Buffer
 
 
 class StandardInputBuffer(Buffer):

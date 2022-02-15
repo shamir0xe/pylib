@@ -1,5 +1,5 @@
 import os
-from .buffer_io import FileReader, BufferReader, StringBuffer
+from .io import FileReader, BufferReader, StringBuffer
 import json
 
 class File:

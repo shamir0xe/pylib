@@ -1,5 +1,5 @@
-from io.helpers.character_detector import CharacterDetector
-from io.buffer import Buffer
+from .helpers.character_detector import CharacterDetector
+from .buffer import Buffer
 
 
 class BufferReader:

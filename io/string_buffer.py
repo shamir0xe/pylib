@@ -1,4 +1,4 @@
-from io.buffer import Buffer
+from .buffer import Buffer
 
 
 class StringBuffer(Buffer):

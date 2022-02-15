@@ -1,6 +1,6 @@
 import os.path
 
-from io.buffer import Buffer
+from .buffer import Buffer
 
 
 class FileBuffer(Buffer):
