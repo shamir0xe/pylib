@@ -12,9 +12,9 @@ class ArgumentParser:
         self.buff = sys.argv[index:]
         self.prefix = option_prefix
         # self.terminal = " ".join(map(shlex.quote, sys.argv[index:]))
-        self.opts = [opt for opt in self.buff[index:] if self.__is_option(opt)]
+        self.opts = [opt for opt in self.buff[index:] if self.is_option(opt)]
         
-    def __is_option(self, str):
+    def is_option(self, str):
         return len(str) > 0 and str.startswith(self.prefix)
 
     def get_options(self):
@@ -25,17 +25,18 @@ class ArgumentParser:
             return False
         index = self.buff.index(option)
         index += 1
-        if index < len(self.buff) and not self.__is_option(self.buff[index]):
+        if index < len(self.buff) and not self.is_option(self.buff[index]):
             return self.buff[index]
         return True
-
-    def get_pairs(self, remove_prefix=False):
+   
+    @staticmethod
+    def get_pairs(remove_prefix=False, *args, **kwargs) -> dict:
+        parser = ArgumentParser(*args, **kwargs)
         pairs = {}
-        for option in self.opts:
+        for option in parser.opts:
             key_name = option
             if remove_prefix:
-                while self.__is_option(key_name):
+                while parser.is_option(key_name):
                     key_name = key_name[1:]
-            pairs[key_name] = self.get_value(option)
+            pairs[key_name] = parser.get_value(option)
         return pairs
-
