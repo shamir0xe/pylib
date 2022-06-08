@@ -12,10 +12,10 @@ class ArgumentParser:
         self.buff = sys.argv[index:]
         self.prefix = option_prefix
         # self.terminal = " ".join(map(shlex.quote, sys.argv[index:]))
-        self.opts = [opt for opt in self.buff[index:] if self.is_option(opt)]
+        self.opts = [opt for opt in self.buff if self.is_option(opt)]
         
-    def is_option(self, str):
-        return len(str) > 0 and str.startswith(self.prefix)
+    def is_option(self, string):
+        return len(string) > 0 and string.startswith(self.prefix)
 
     def get_options(self):
         return self.opts
