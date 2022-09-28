@@ -1,5 +1,5 @@
-from ..utils import debug_text
 from ..buffer_io import (BufferReader, StringBuffer)
+
 
 class StringHelper:
     @staticmethod

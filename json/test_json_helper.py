@@ -1,8 +1,7 @@
 import unittest
 import random
 from .json_helper import JsonHelper
-from ..utils import debug_text
-import json
+
 
 class TestJsonHelper(unittest.TestCase):
     def setUp(self):
