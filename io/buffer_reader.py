@@ -42,6 +42,7 @@ class BufferReader:
 
     def __read_char(self, pick=False):
         res = self.__read_char_from_buffer(pick)
+        # print(f'~~~ {res}')
         # if self.__log_writer is not None and len(res) > 0 and True:
         #     # not (
         #     #         CharacterHandler.is_digit(res) or CharacterHandler.is_alphabet(res) or
@@ -87,7 +88,6 @@ class BufferReader:
         return res
 
     def end_of_buffer(self) -> bool:
-        self.skip_spaces()
         return self.eof
 
     def next_string(self) -> str:
@@ -102,15 +102,16 @@ class BufferReader:
     def next_line(self) -> str:
         res = ""
         while True:
-            if self.eof or self.is_return_char(self.c):
-                # self.__read_char()  # it should be {return} char
-                break
-            res += self.c
             self.c = self.__read_char()
+            res += self.c
+            if self.eof or self.is_return_char(self.c):
+                break
         return res
 
     def next_char(self, pick=False) -> str:
-        return self.__read_char(pick)
+        c = self.__read_char(pick)
+        # print(f'~~~<{c}>')
+        return c
 
     def close(self):
         return self.f.close()
