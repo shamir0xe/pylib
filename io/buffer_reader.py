@@ -6,7 +6,7 @@ class BufferReader:
     """
     string buffer parser class
     """
-    CHARACTER_READ_COUNT = 10
+    CHARACTER_READ_COUNT = 4096
 
     def __init__(
             self,
@@ -38,7 +38,7 @@ class BufferReader:
 
     @staticmethod
     def is_return_char(character):
-        return character in '\n'
+        return character in ['\n', '\r\n', '\n\r']
 
     def __read_char(self, pick=False):
         res = self.__read_char_from_buffer(pick)

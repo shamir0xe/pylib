@@ -12,12 +12,12 @@ class BufferWriter:
 
     def write(self, string) -> BufferWriter:
         self.__buffer.write(string)
+        self.__buffer.flush()
         # self.__inner_writer += string
         return self
 
     def write_line(self, string) -> BufferWriter:
-        self.write(string)
-        self.write("\n")
+        self.write(f'{string}\n')
         return self
 
     def flush(self):
