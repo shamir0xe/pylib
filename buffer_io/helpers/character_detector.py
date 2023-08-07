@@ -3,13 +3,13 @@ from .character_types import CharacterTypes
 
 class CharacterDetector:
     delimiters = [
-        ord(' '),
-        ord('\t'),
-        ord('\n'),
-        ord('\r'),
-        ord('\b'),
-        ord('\v'),
-        ord('\f'),
+        ord(" "),
+        ord("\t"),
+        ord("\n"),
+        ord("\r"),
+        ord("\b"),
+        ord("\v"),
+        ord("\f"),
     ]
 
     @staticmethod
@@ -32,26 +32,40 @@ class CharacterDetector:
 
     @staticmethod
     def is_dot(char):
-        return char in '.'
+        return char in "."
 
     @staticmethod
     def is_separator(char):
-        return char in ('\'', '"', '`', '/', '\\', ':', ',', ';', '.', '_')
+        return char in ("'", '"', "`", "/", "\\", ":", ",", ";", ".", "_")
 
     @staticmethod
     def is_parenthesis(char):
-        return char in ('(', ')', '[', ']', '{', '}')
+        return char in ("(", ")", "[", "]", "{", "}")
 
     @staticmethod
     def is_operator(char):
-        return char in ('+', '-', '*', '^', '%', '&', '|', '~', '!', '=', '@',
-                        '#', '$', '>', '<')
+        return char in (
+            "+",
+            "-",
+            "*",
+            "^",
+            "%",
+            "&",
+            "|",
+            "~",
+            "!",
+            "=",
+            "@",
+            "#",
+            "$",
+            ">",
+            "<",
+        )
 
     @staticmethod
     def is_digit(char):
-        return ord('0') <= ord(char) <= ord('9')
+        return ord("0") <= ord(char) <= ord("9")
 
     @staticmethod
     def is_alphabet(char):
-        return ord('a') <= ord(char) <= ord('z') or ord('A') <= ord(
-            char) <= ord('Z')
+        return ord("a") <= ord(char) <= ord("z") or ord("A") <= ord(char) <= ord("Z")

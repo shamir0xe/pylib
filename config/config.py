@@ -1,14 +1,14 @@
 from typing import Any
 from ..file.file import File
-from ..path.path import Path
-from ..json.json_helper import JsonHelper
+from ..helpers.path.path_helper import PathHelper
+from ..helpers.json.json_helper import JsonHelper
 
 
 class Config:
     def __init__(self, filename: str) -> None:
         filename += '.json'
         self.json = File.read_json(
-            Path.from_root('configs', filename)
+            PathHelper.from_root('configs', filename)
         )
     
     def get(self, selector: str = '', default: Any = None) -> Any:

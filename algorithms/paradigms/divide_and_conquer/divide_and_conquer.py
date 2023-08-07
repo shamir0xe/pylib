@@ -1,49 +1,34 @@
-from enum import Enum
-from .geometry import Geometry
-from .utils import (debug_text)
+from typing import List
+from .merge_types import MergeTypes
+from .node_wrapper import NodeWrapper
 
 
-class Steps(Enum):
-    X = 0
-    Y = 1
-
-
-class MergeTypes(Enum):
-    APPEND = 0
-    UNIFY = 1
-    SUM = 2
-
-
-class PointWrapper:
-    def __init__(self, obj, point):
-        self.point = point
-        self.obj = obj
-
-    def __lt__(self, other):
-        return self.point < other.point
-
-    def __str__(self):
-        return '({}, {})'.format(self.point, self.obj)
+MAX_SIZE = 33
 
 
 class DivideAndConquer:
     """
-    implementation for 2D D&C
+    general implementation of D&C
     """
-    def __init__(self, points, splitter_fn, *args):
-        self.points = points
+
+    def __init__(self, nodes: List[NodeWrapper], splitter_fn: function, *args):
+        """
+        splitter_fn: the function that should be applied on the smallest sample size
+        args: the list of arguments to be passed to splitter_fn
+        """
+        self.nodes = nodes
         self.fn = splitter_fn
         self.fn_args = args
         self.max_size = None
         self.merge_type = MergeTypes.SUM
-        self.__total_points = len(points)
+        self.__dimension = len(nodes[0].point)
+        self.__total_points = len(nodes)
         self.__process = 0
 
-    def solve(self, max_size=33, merge_type=MergeTypes.SUM):
+    def solve(self, max_size=MAX_SIZE, merge_type=MergeTypes.SUM):
         self.max_size = max_size
         self.merge_type = merge_type
-        n = len(self.points)
-        return self.__solve(Steps.X, 0, n)
+        return self.__solve(0, 0, self.__total_points)
 
     def merge_results(self, res_0, res_1):
         """
@@ -54,7 +39,6 @@ class DivideAndConquer:
         if res_1 is None:
             return res_0
         if self.merge_type == MergeTypes.UNIFY:
-            debug_text("let's merge the results %-%", res_0, res_1)
             res = []
             min_length = min(len(res_0), len(res_1))
             for i in range(min_length):
@@ -75,20 +59,19 @@ class DivideAndConquer:
         self.callback_process(self.__process / self.__total_points)
 
     def __solve(self, step_direction, start_idx, end_idx, depth=0):
-        # print('{}-{}-[{}-{}]'.format(step_direction, depth, start_idx,
-        #                              end_idx))
         if end_idx <= start_idx:
             return None
         if end_idx - start_idx <= self.max_size:
             self.__increase_process(end_idx - start_idx)
-            selection = [point.obj for point in self.points[start_idx:end_idx]]
+            selection = [node.obj for node in self.nodes[start_idx:end_idx]]
             return self.fn(selection, *self.fn_args)
-        self.points[start_idx:end_idx] = \
-            sorted(self.points[start_idx:end_idx], key=lambda point_wrap: point_wrap.point.x if
-             step_direction is Steps.X else point_wrap.point.y)
+        self.nodes[start_idx:end_idx] = sorted(
+            self.nodes[start_idx:end_idx],
+            key=lambda node: node.point[step_direction]
+        )
         mid = (end_idx + start_idx) >> 1
         results = [None, None]
-        next_dir = Steps.X if step_direction is Steps.Y else Steps.Y
+        next_dir = (step_direction + 1) % self.__dimension
         results[0] = self.__solve(next_dir, start_idx, mid + 1, depth + 1)
         results[1] = self.__solve(next_dir, mid + 1, end_idx, depth + 1)
         return self.merge_results(*results)

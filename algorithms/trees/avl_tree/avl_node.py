@@ -1,6 +1,6 @@
-from .utils import (HashGenerator)
+from helpers.string.hash_generator import (HashGenerator)
 
-class Node:
+class AvlNode:
 	def __init__(self, objective=None):
 		self.__value = objective
 		self.__height = 1
@@ -86,10 +86,5 @@ class Node:
 		return False
 
 	def __lt__(self, other):
-		# if other is None:
-		# 	return False
-		# if self.__value == other.get_value():
-		# 	return False
-		# if other.get_value is None:
-		# 	return False
 		return self.__value < other.get_value()
+

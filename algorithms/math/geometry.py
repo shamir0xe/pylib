@@ -1,26 +1,28 @@
 from __future__ import annotations
 import math
 import random
-from .buffer_io import (BufferReader, StringBuffer)
+from buffer_io import BufferReader, StringBuffer
 
 
 class Geometry:
+    """
+    a library for 2D geometry problems"""
     EPS = 1e-9
 
     @staticmethod
     def translate(string, *points):
         """
-		. dot
-		* cross
-		*. scalar product
-		+ sum
-		- subtract
-		"""
-        operators = ['.', '*', '*.', "+", "-"]
+        . dot
+        * cross
+        *. scalar product
+        + sum
+        - subtract
+        """
+        operators = [".", "*", "*.", "+", "-"]
 
         def parse_point(p):
             if type(p) is str:
-                index = ''.join(''.join(p.split('[')).split(']'))
+                index = "".join("".join(p.split("[")).split("]"))
                 index = int(index)
                 return points[index]
             return p
@@ -32,23 +34,23 @@ class Geometry:
             stack.append(token)
             if token in operators:
                 stack.pop()
-                if token == '.':
+                if token == ".":
                     b = parse_point(stack.pop())
                     a = parse_point(stack.pop())
                     stack.append(Geometry.dot(a, b))
-                elif token == '*':
+                elif token == "*":
                     b = parse_point(stack.pop())
                     a = parse_point(stack.pop())
                     stack.append(None)  # cross not implemented
-                elif token == '*.':
+                elif token == "*.":
                     b = float(parse_point(stack.pop()))
                     a = parse_point(stack.pop())
                     stack.append(Geometry.Point.times(a, b))
-                elif token == '+':
+                elif token == "+":
                     b = parse_point(stack.pop())
                     a = parse_point(stack.pop())
                     stack.append(Geometry.Point.add(a, b))
-                elif token == '-':
+                elif token == "-":
                     b = parse_point(stack.pop())
                     a = parse_point(stack.pop())
                     stack.append(Geometry.Point.sub(a, b))
@@ -58,8 +60,8 @@ class Geometry:
     @staticmethod
     def side_sign(p1, p2, p3):
         """
-		returns: 1 left, 0 on, -1 right
-		"""
+        returns: 1 left, 0 on, -1 right
+        """
         sign = (p1.x - p3.x) * (p2.y - p3.y) - (p1.y - p3.y) * (p2.x - p3.x)
         if math.fabs(sign) < Geometry.EPS:
             return 0
@@ -74,14 +76,14 @@ class Geometry:
     @staticmethod
     def inside_polygon(points, p):
         """
-			returns:
-				1 - inside
-				2 - on the border
-				3 - outside
-			of the polygon.
-			points are ordered clockwise or counter-clockwise
+        returns:
+                1 - inside
+                2 - on the border
+                3 - outside
+        of the polygon.
+        points are ordered clockwise or counter-clockwise
 
-		"""
+        """
         sz = len(points)
         for x in range(sz):
             y = (x + 1) % sz
@@ -90,13 +92,16 @@ class Geometry:
 
         ray = Geometry.Line(
             p,
-            Geometry.Point(random.randint(123456, 789123),
-                           random.randint(123456, 789123)))
+            Geometry.Point(
+                random.randint(123456, 789123), random.randint(123456, 789123)
+            ),
+        )
         counter = 0
         for x in range(sz):
             y = (x + 1) % sz
             intersection = Geometry.segment_intersection(
-                ray, Geometry.Line(points[x], points[y]))
+                ray, Geometry.Line(points[x], points[y])
+            )
             if intersection is None:
                 continue
             counter += 1
@@ -108,10 +113,16 @@ class Geometry:
     @staticmethod
     def in_between(p1, intersection, p2):
         """
-			check wether intersection is in the middle of p1-p2 segment or not
-		"""
-        return math.fabs(Geometry.dist(p1, intersection) + Geometry.dist(intersection, p2) \
-         - Geometry.dist(p1, p2)) < Geometry.EPS
+        check wether intersection is in the middle of p1-p2 segment or not
+        """
+        return (
+            math.fabs(
+                Geometry.dist(p1, intersection)
+                + Geometry.dist(intersection, p2)
+                - Geometry.dist(p1, p2)
+            )
+            < Geometry.EPS
+        )
 
     @staticmethod
     def dist(p1, p2):
@@ -120,15 +131,15 @@ class Geometry:
     @staticmethod
     def segment_intersection(l1, l2):
         """
-			returns the intersection of the 2 segments, l1 and l2
-		"""
+        returns the intersection of the 2 segments, l1 and l2
+        """
         intersection = Geometry.intersection(l1, l2)
         if intersection is None:
             return None
 
-        if Geometry.in_between(l1.p1, intersection,
-                               l1.p2) and Geometry.in_between(
-                                   l2.p1, intersection, l2.p2):
+        if Geometry.in_between(l1.p1, intersection, l1.p2) and Geometry.in_between(
+            l2.p1, intersection, l2.p2
+        ):
             return intersection
         return None
 
@@ -147,7 +158,8 @@ class Geometry:
         ua /= d
 
         point = Geometry.Point.add(
-            p1, Geometry.Point.times(Geometry.Point.sub(p2, p1), ua))
+            p1, Geometry.Point.times(Geometry.Point.sub(p2, p1), ua)
+        )
         return point
 
     class Point:
@@ -156,7 +168,7 @@ class Geometry:
             self.y = y
 
         def __str__(self):
-            return '({:.02f}, {:.02f})'.format(self.x, self.y)
+            return "({:.02f}, {:.02f})".format(self.x, self.y)
 
         def length(self):
             return math.sqrt(self.x * self.x + self.y * self.y)
@@ -175,9 +187,11 @@ class Geometry:
             return self.x + Geometry.EPS < other.x
 
         def __eq__(self, other):
-            return math.fabs(self.x - other.x) < Geometry.EPS and math.fabs(
-                self.y - other.y) < Geometry.EPS
-        
+            return (
+                math.fabs(self.x - other.x) < Geometry.EPS
+                and math.fabs(self.y - other.y) < Geometry.EPS
+            )
+
         def sin(self) -> float:
             return self.y / self.length()
 
@@ -186,10 +200,10 @@ class Geometry:
 
         def subtract(self, p) -> Geometry.Point:
             return Geometry.Point.sub(self, p)
-        
+
         def addition(self, p) -> Geometry.Point:
             return Geometry.Point.add(self, p)
-        
+
         def cross(self, p) -> float:
             return p.y * self.x - p.x * self.y
 
@@ -215,8 +229,10 @@ class Geometry:
 
         @staticmethod
         def is_equal(p1, p2):
-            return math.fabs(p1.x - p2.x) < Geometry.EPS and math.fabs(
-                p1.y - p2.y) < Geometry.EPS
+            return (
+                math.fabs(p1.x - p2.x) < Geometry.EPS
+                and math.fabs(p1.y - p2.y) < Geometry.EPS
+            )
 
     class Line:
         def __init__(self, p1, p2):
@@ -224,4 +240,4 @@ class Geometry:
             self.p2 = p2
 
         def __str__(self) -> str:
-            return '{} -> {}'.format(self.p1, self.p2)
+            return "{} -> {}".format(self.p1, self.p2)

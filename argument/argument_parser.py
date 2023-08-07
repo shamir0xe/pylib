@@ -4,11 +4,11 @@ from ..data.variable_type_modifier import VariableTypeModifier
 
 
 class ArgumentParser:
-    def __init__(self, index = 1, option_prefix = '-'):
+    def __init__(self, index=1, option_prefix="-"):
         """
-            Args:
-            index (int, optional): [index where to start reading sys.argv]. Defaults to 1.
-            option_prefix (str, optional): [the character that specifies an option]. Defaults to '-'.
+        Args:
+        index (int, optional): [index where to start reading sys.argv]. Defaults to 1.
+        option_prefix (str, optional): [the character that specifies an option]. Defaults to '-'.
         """
         self.buff = sys.argv[index:]
         self.prefix = option_prefix
@@ -17,22 +17,19 @@ class ArgumentParser:
         self.__pre_process()
 
     def __pre_process(self) -> None:
-        last_opt = ''
+        last_opt = ""
         values = []
         for temp in self.buff:
             if self.__is_option(temp):
-                if last_opt != '':
+                if last_opt != "":
                     self.options[last_opt] = values
                 last_opt, values = (self.__trim(temp), [])
             else:
-                temp = VariableTypeModifier(temp) \
-                    .cast_int() \
-                    .cast_float() \
-                    .get()
+                temp = VariableTypeModifier(temp).cast_int().cast_float().get()
                 values.append(temp)
-        if last_opt != '':
+        if last_opt != "":
             self.options[last_opt] = values
-        
+
     def __trim(self, opt: str) -> str:
         while opt.startswith(self.prefix):
             opt = opt[1:]
@@ -57,4 +54,3 @@ class ArgumentParser:
         if not option in options or len(options[option]) == 0:
             return None
         return tuple(options[option])
-   

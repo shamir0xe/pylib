@@ -1,5 +1,4 @@
-from .node import Node
-from .utils import debug_text
+from .avl_node import AvlNode
 
 
 class AvlTree:
@@ -8,6 +7,7 @@ class AvlTree:
     all of the orders are optimum as hell
     node's value should have been implemented with __lt__ operator
     """
+
     def __init__(self):
         self.__root = None
 
@@ -25,9 +25,9 @@ class AvlTree:
         adding a new node with a value equals to {value}
         """
         if self.get_root() is None:
-            self.__root = Node(value)
+            self.__root = AvlNode(value)
         else:
-            self.__root = self.__add(self.__root, Node(value))
+            self.__root = self.__add(self.__root, AvlNode(value))
 
     def find(self, objective):
         """
@@ -61,8 +61,7 @@ class AvlTree:
         if node is None:
             return False
         # debug_text("\n\n==>{}".format(node.get_hash()))
-        self.__root = self.__remove(node.get_value(), self.__root,
-                                    node.get_hash())
+        self.__root = self.__remove(node.get_value(), self.__root, node.get_hash())
         return True
 
     def get_size(self):
@@ -122,15 +121,17 @@ class AvlTree:
                 right = node.get_right()
                 if not right is None:
                     node = self.__rotate_left(node)
-                    left = self.__remove(objective, node.get_left(),
-                                         node.get_left().get_hash())
+                    left = self.__remove(
+                        objective, node.get_left(), node.get_left().get_hash()
+                    )
                     node.set_left(left)
                 else:
                     left = node.get_left()
                     if not left is None:
                         node = self.__rotate_right(node)
-                        right = self.__remove(objective, node.get_right(),
-                                              node.get_right().get_hash())
+                        right = self.__remove(
+                            objective, node.get_right(), node.get_right().get_hash()
+                        )
                         node.set_right(right)
                     else:
                         del node
@@ -146,11 +147,11 @@ class AvlTree:
         if node is None:
             return None
 
-        c = '=='
+        c = "=="
         if objective < node.get_value():
-            c = '<'
+            c = "<"
         if node.get_value() < objective:
-            c = '>'
+            c = ">"
         # debug_text("obj{}node - {}/{}".format(c, node.get_hash(), node_hash))
         if objective < node.get_value():
             return self.__find(objective, node.get_left(), node_hash)
@@ -227,6 +228,7 @@ class AvlTree:
     def __str__(self):
         res = []
         self.inorder_list(self.__root, res)
-        list_string = ''.join(res)
-        return 'list: {}\nbalance: {}, size: {}'.format(
-            list_string, self.__root.get_balance(), self.__root.get_size())
+        list_string = "".join(res)
+        return "list: {}\nbalance: {}, size: {}".format(
+            list_string, self.__root.get_balance(), self.__root.get_size()
+        )
