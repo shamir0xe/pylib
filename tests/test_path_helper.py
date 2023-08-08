@@ -1,5 +1,5 @@
 import unittest
-from helpers.path.path_helper import PathHelper
+from facades.path.path_helper import PathHelper
 
 
 class TestPath(unittest.TestCase):
@@ -7,7 +7,7 @@ class TestPath(unittest.TestCase):
         return super().setUp()
 
     def test_backward_steps(self):
-        print(PathHelper.from_root(backward_times=4))
+        print(PathHelper.from_root())
         self.assertTrue(1)
 
 

@@ -6,11 +6,13 @@ from buffer_io import BufferReader, StringBuffer
 
 class Geometry:
     """
-    a library for 2D geometry problems"""
+    a library for 2D geometry problems
+    """
+
     EPS = 1e-9
 
     @staticmethod
-    def translate(string, *points):
+    def translate(expression, *points):
         """
         . dot
         * cross
@@ -27,7 +29,7 @@ class Geometry:
                 return points[index]
             return p
 
-        string_buffer = BufferReader(StringBuffer(string))
+        string_buffer = BufferReader(StringBuffer(expression))
         stack = []
         while not string_buffer.end_of_buffer():
             token = string_buffer.next_string()

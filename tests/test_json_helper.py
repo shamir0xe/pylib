@@ -1,6 +1,6 @@
 import unittest
 import random
-from helpers.json.json_helper import JsonHelper
+from facades.json.json_helper import JsonHelper
 
 
 class TestJsonHelper(unittest.TestCase):

@@ -1,7 +1,7 @@
 from typing import Any
 from ..file.file import File
-from ..helpers.path.path_helper import PathHelper
-from ..helpers.json.json_helper import JsonHelper
+from ..path.path_helper import PathHelper
+from ..json.json_helper import JsonHelper
 
 
 class Config:

@@ -6,13 +6,14 @@ class BufferReader:
     """
     string buffer parser class
     """
+
     CHARACTER_READ_COUNT = 4096
 
     def __init__(
-            self,
-            input_buffer: Buffer,
-            delimiters: str = None,
-            exclude_delimiters: str = None,
+        self,
+        input_buffer: Buffer,
+        delimiters: str = None,
+        exclude_delimiters: str = None,
     ):
         self.f = input_buffer
         self.__buff = ""
@@ -33,12 +34,13 @@ class BufferReader:
         # self.__log_writer = log_writer
 
     def is_space_char(self, character):
-        return type(character) is str and (character == '' or
-                                           ord(character) in self.__delimiters)
+        return type(character) is str and (
+            character == "" or ord(character) in self.__delimiters
+        )
 
     @staticmethod
     def is_return_char(character):
-        return character in ['\n', '\r\n', '\n\r']
+        return character in ["\n", "\r\n", "\n\r"]
 
     def __read_char(self, pick=False):
         res = self.__read_char_from_buffer(pick)
@@ -66,7 +68,7 @@ class BufferReader:
 
             if self.__buff_length == 0:
                 self.eof = True
-                return ''
+                return ""
         res = self.__buff[self.__buff_position]
         self.__buff_position += 1 if not pick else 0
         return res
