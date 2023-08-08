@@ -1,7 +1,8 @@
 <h1 align="center" style="display: block; font-size: 2.5em; font-weight: bold; margin-block-start: 1em; margin-block-end: 1em;">
-<a name="logo" href="#"><img align="center" src="https://github.com/shamir0xe/assets/logos/pylib.png" alt="pylib" style="width:100%;height:100%"/></a>
-  <br /><br /><strong>pylib</strong>
+<a name="logo" href="#"><img align="center" src="https://github.com/shamir0xe/pylib/blob/main/assets/logos/pylib.png?raw=true" alt="pylib" style="width:100%;height:100%"/></a>
+<br/><br/><strong>pylib</strong>
 </h1>
+
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue)
