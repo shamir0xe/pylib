@@ -20,12 +20,11 @@ This library covers multiple aspects, including:
   - [Buffer IO](#buffer-io)
   - [Data](#data)
   - [Debug Tools](#debug-tools)
-  - [Facades](#facades)
-    - [Config](#config)
-    - [File](#file)
-    - [Json](#json)
-    - [Path](#path)
-    - [String](#string)
+  - [Config](#config)
+  - [File](#file)
+  - [Json](#json)
+  - [Path](#path)
+  - [String](#string)
 
 
 ## Documentation
@@ -118,16 +117,15 @@ debug_text('%B%USome Object%E [%c#%%E] -> %r%%E', 12, {"a": 34})
 
 - [TerminalProcess](debug_tools/terminal_process.py): A neat progress bar for long tasks.
 
-### Facades
-#### Config
-- [Config](facades/config/config.py)
-#### File
-- [File](facades/file/file.py)
-#### Json
-- [JsonHelper](facades/json/json_helper.py)
-#### Path
-- [PathHelper](facades/path/path_helper.py)
-#### String
-- [StringHelper](facades/string/string_helper.py)
-- [HashGenerator](facades/string/hash_generator.py)
+### Config
+- [Config](config/config.py)
+### File
+- [File](file/file.py)
+### Json
+- [JsonHelper](json/json_helper.py)
+### Path
+- [PathHelper](path/path_helper.py)
+### String
+- [StringHelper](string/string_helper.py)
+- [HashGenerator](string/hash_generator.py)
 
