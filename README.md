@@ -131,9 +131,8 @@ under the `configs` folder, you have several .json config files, or folders cont
   - `append_to_file(file_path, string)`
   - `get_all_files(directory_path, extension)`
 ### Json
-- [JsonHelper](json/json_helper.py): With this class, you can read, write and merge `json` files with dot notations. Selector example:
+- [JsonHelper](json/json_helper.py): With this class, you can read, write and merge `json` files with dot notations. Selector example (for `file.json`):
 ```json
-file.json
 {
     "a": {
         "b": {
