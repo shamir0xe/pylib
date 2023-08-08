@@ -1,5 +1,5 @@
 import unittest
-from debug_tools.debug_text import debug_text
+from ..debug_tools.debug_text import debug_text
 
 
 class test_debug_text(unittest.TestCase):

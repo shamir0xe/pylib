@@ -1,5 +1,5 @@
 import unittest
-from facades.path.path_helper import PathHelper
+from ..path.path_helper import PathHelper
 
 
 class TestPath(unittest.TestCase):

@@ -13,10 +13,10 @@ class PathHelper:
     @staticmethod
     def from_root(*path, **kwargs) -> str:
         """
-        assuming the arcitecture is like src/libs/python_library, 
-        then depth should be 4
+        assuming the arcitecture is like src/libs/pylib, 
+        then depth should be 3
         """
-        backward_times = 4
+        backward_times = 3
         if "backward_times" in kwargs:
             backward_times = kwargs["backward_times"]
         return os.path.normpath(
