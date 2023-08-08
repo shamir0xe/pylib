@@ -1,4 +1,4 @@
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -100,31 +100,68 @@ while not reader.end_of_buffer():
 - [debug_text](debug_tools/debug_text.py): Alternative way to debuging the code via prints into the stderr. example:
 ```python
 debug_text('%B%USome Object%E [%c#%%E] -> %r%%E', 12, {"a": 34})
-# output:
 ```
 <pre>[<u style="text-decoration-style:single"><b>Some Object</b></u> [<font color="#34E2E2">#12</font>] -&gt; <font color="#EF2929">{&apos;a&apos;: 34}</font>]</pre>
 - list of options:
-    1. %c: cyan color
-    1. %r: red color
-    1. %b: blue color
-    1. %g: green color
-    1. %y: yellow color
-    1. %H: alternative color
-    1. %B: bold text
-    1. %U: underlined text
-    1. %E: clear modifiers
+  1. %c: cyan color
+  1. %r: red color
+  1. %b: blue color
+  1. %g: green color
+  1. %y: yellow color
+  1. %H: alternative color
+  1. %B: bold text
+  1. %U: underlined text
+  1. %E: clear modifiers
 
 
 - [TerminalProcess](debug_tools/terminal_process.py): A neat progress bar for long tasks.
 
 ### Config
-- [Config](config/config.py)
+- [Config](config/config.py): A facade class to read json config files easily. I'ts so powerful when you provide your configs in the hierarchical pattern.
+example usage:
+under the `configs` folder, you have several .json config files, or folders containing configs. Let's assume we want to access `humans.male.height` attribute from `mammals.json`. We have two approaches to achieve it:
+    1. `Config('mammals').get('humans.male.height)`
+    2. `Config.read('mammals.humans.male.height)`
+
+  It could have default value if there is no correspond attribute was found. like we could have written `Config.read(..., default=180)`
 ### File
-- [File](file/file.py)
+- [File](file/file.py): A class that contains some useful functions to deal with files. Some of them are:
+  - `read_json(file_path)`
+  - `read_csv(file_path)`
+  - `append_to_file(file_path, string)`
+  - `get_all_files(directory_path, extension)`
 ### Json
-- [JsonHelper](json/json_helper.py)
+- [JsonHelper](json/json_helper.py): With this class, you can read, write and merge `json` files with dot notations. Selector example:
+```json
+file.json
+{
+    "a": {
+        "b": {
+            "c": {
+                "f": "g"
+            }
+        },
+        "d": [1, 2],
+        "e": {}
+    }
+}
+```
+```python
+json_file = File.read_json('file.json')
+JsonHelper.selector_get_value(json_file, 'a.b.c.f') # g
+JsonHelper.selector_get_value(json_file, 'a.d') # [1, 2]
+```
+
 ### Path
-- [PathHelper](path/path_helper.py)
+- [PathHelper](path/path_helper.py): Provides absolute pathing for the project. Then you can use releative pathing after reaching the project root. As an example:
+```python
+path = PathHelper.from_root('assets', 'imgs', '1.png')
+```
+  It will construct the path from the root of the project to the desired file, for this specific example, the file should be accessible under this path: `$project_root/assets/imgs/1.png`.
+  You can also provide how much this function should go back inorder to reach the root of the project. By default, it's assumed this library is been placed in 2 layers away from the root of the project. Something like `$project_root/libs/pylib`. If you placed it rather than 2 layers away, you can specify the exact amount of layers it sould went back to reach the root as an `backward_times` argument. Then the above example could be rewritten as something like this:
+```python
+path = PathHelper.from_root(..., backward_times=4)
+```
 ### String
 - [StringHelper](string/string_helper.py)
 - [HashGenerator](string/hash_generator.py)

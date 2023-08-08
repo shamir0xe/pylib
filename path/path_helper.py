@@ -1,6 +1,8 @@
 import os
 
 
+DEFAULT_BACKWARD_TIMES = 3
+
 class PathHelper:
     @staticmethod
     def root_path(backward_times: int) -> str:
@@ -16,7 +18,7 @@ class PathHelper:
         assuming the arcitecture is like src/libs/pylib, 
         then depth should be 3
         """
-        backward_times = 3
+        backward_times = DEFAULT_BACKWARD_TIMES
         if "backward_times" in kwargs:
             backward_times = kwargs["backward_times"]
         return os.path.normpath(

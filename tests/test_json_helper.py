@@ -2,7 +2,6 @@ import unittest
 import random
 from ..json.json_helper import JsonHelper
 
-
 class TestJsonHelper(unittest.TestCase):
     def setUp(self):
         self.js = {"sdas": 123, "some_array": [{"a": 1}, {"b": "321"}]}
