@@ -23,6 +23,7 @@ This library covers multiple aspects, including:
   - [File](#file)
   - [Json](#json)
   - [Path](#path)
+  - [Argument](#argument)
   - [String](#string)
   - [Algorithms](#algorithms)
     - [Graph](#graph)
@@ -30,7 +31,6 @@ This library covers multiple aspects, including:
     - [Paradigms](#paradigms)
     - [String Processing](#string-processing)
     - [Trees](#trees)
-  - [Argument](#argument)
 
 
 ## Documentation
@@ -133,6 +133,21 @@ path = PathHelper.from_root('assets', 'imgs', '1.png')
 path = PathHelper.from_root(..., backward_times=4)
 ```
 
+### Argument
+- [ArgumentParser](argument/argument_parser.py):
+Useful tool to reading arguments passed to a python program executed via command line interface (terminal). 
+for example if you run your program as follow:
+
+```terminal
+python3 main.py --color green --size 2 --fast --O2
+```
+you can access the arguments through: 
+```python
+ArgumentParser.get_value('color') -> green
+ArgumentParser.get_value('size') -> 2
+ArgumentParser.is_option('O2') -> true
+```
+
 ### String
 - [StringHelper](string/string_helper.py)
 - [HashGenerator](string/hash_generator.py)
@@ -157,17 +172,3 @@ path = PathHelper.from_root(..., backward_times=4)
 #### Trees
 - [AvlTree](algorithms/trees/avl_tree)
 
-### Argument
-- [ArgumentParser](argument/argument_parser.py):
-Useful tool to reading arguments passed to a python program executed via command line interface (terminal). 
-for example if you run your program as follow:
-
-```terminal
-python3 main.py --color green --size 2 --fast --O2
-```
-you can access the arguments through: 
-```python
-ArgumentParser.get_value('color') -> green
-ArgumentParser.get_value('size') -> 2
-ArgumentParser.is_option('O2') -> true
-```
