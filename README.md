@@ -16,13 +16,6 @@ This library covers multiple aspects, including:
 
 - [Table of contents](#table-of-contents)
 - [Documentation](#documentation)
-  - [Algorithms](#algorithms)
-    - [Graph](#graph)
-    - [Math](#math)
-    - [Paradigms](#paradigms)
-    - [String Processing](#string-processing)
-    - [Trees](#trees)
-  - [Argument](#argument)
   - [Buffer IO](#buffer-io)
   - [Data](#data)
   - [Debug Tools](#debug-tools)
@@ -31,44 +24,16 @@ This library covers multiple aspects, including:
   - [Json](#json)
   - [Path](#path)
   - [String](#string)
+  - [Algorithms](#algorithms)
+    - [Graph](#graph)
+    - [Math](#math)
+    - [Paradigms](#paradigms)
+    - [String Processing](#string-processing)
+    - [Trees](#trees)
+  - [Argument](#argument)
 
 
 ## Documentation
-### Algorithms
-#### Graph
-- [flows](algorithms/graph/flows): provides algorithms in max-flow problem, including:
-    - [MaxFlow](algorithms/graph/flows/maxflow.py)
-- [MST](algorithms/graph/mst.py)
-- [TSP](algorithms/graph/tsp.py)
-#### Math
-- [Geometry](algorithms/math/geometry.py): A neat implemented 2d-geometry library. Some of the usefull functions that it provides are:
-    - `translate(expression, *points)`: recieves arithmatic expression and the points afterwards. Returns the answer of the expression. example:
-    `translate('* + *.', p1, p2, p3, scalar)` = `((p1 * p2) + p3) *. scalar`
-    - `side_sign(p1, p2, p3)`: Returns in which side of the p1->p2 line, p3 is located.
-    - `inside_polygon(points, p)`
-    - `segment_intersection(l1, l2)`
-#### Paradigms
-- [DevideAndConquer](algorithms/paradigms/divide_and_conquer): Implementation of D&D algorithmic paradigm.
-#### String Processing
-- [LIS](algorithms/string_processing/lis.py): Longest Increasing Subsequence implementation.
-#### Trees
-- [AvlTree](algorithms/trees/avl_tree)
-
-### Argument
-- [ArgumentParser](argument/argument_parser.py):
-Useful tool to reading arguments passed to a python program executed via command line interface (terminal). 
-for example if you run your program as follow:
-
-```terminal
-python3 main.py --color green --size 2 --fast --O2
-```
-you can access the arguments through: 
-```python
-ArgumentParser.get_value('color') -> green
-ArgumentParser.get_value('size') -> 2
-ArgumentParser.is_option('O2') -> true
-```
-
 ### Buffer IO
 This module provides several ways to read, write and edit buffers. You can define `file`, `str` and `standard-input` buffers.
 - [Buffer](buffer_io/buffer.py)
@@ -167,7 +132,42 @@ path = PathHelper.from_root('assets', 'imgs', '1.png')
 ```python
 path = PathHelper.from_root(..., backward_times=4)
 ```
+
 ### String
 - [StringHelper](string/string_helper.py)
 - [HashGenerator](string/hash_generator.py)
 
+### Algorithms
+#### Graph
+- [flows](algorithms/graph/flows): provides algorithms in max-flow problem, including:
+    - [MaxFlow](algorithms/graph/flows/maxflow.py)
+- [MST](algorithms/graph/mst.py)
+- [TSP](algorithms/graph/tsp.py)
+#### Math
+- [Geometry](algorithms/math/geometry.py): A neat implemented 2d-geometry library. Some of the usefull functions that it provides are:
+    - `translate(expression, *points)`: recieves arithmatic expression and the points afterwards. Returns the answer of the expression. example:
+    `translate('* + *.', p1, p2, p3, scalar)` = `((p1 * p2) + p3) *. scalar`
+    - `side_sign(p1, p2, p3)`: Returns in which side of the p1->p2 line, p3 is located.
+    - `inside_polygon(points, p)`
+    - `segment_intersection(l1, l2)`
+#### Paradigms
+- [DevideAndConquer](algorithms/paradigms/divide_and_conquer): Implementation of D&D algorithmic paradigm.
+#### String Processing
+- [LIS](algorithms/string_processing/lis.py): Longest Increasing Subsequence implementation.
+#### Trees
+- [AvlTree](algorithms/trees/avl_tree)
+
+### Argument
+- [ArgumentParser](argument/argument_parser.py):
+Useful tool to reading arguments passed to a python program executed via command line interface (terminal). 
+for example if you run your program as follow:
+
+```terminal
+python3 main.py --color green --size 2 --fast --O2
+```
+you can access the arguments through: 
+```python
+ArgumentParser.get_value('color') -> green
+ArgumentParser.get_value('size') -> 2
+ArgumentParser.is_option('O2') -> true
+```
