@@ -1,9 +1,9 @@
 import json
 import os
-from buffer_io.buffer_reader import BufferReader
-from buffer_io.file_buffer import FileBuffer
-from buffer_io.buffer_writer import BufferWriter
-from buffer_io.string_buffer import StringBuffer
+from ..buffer_io.buffer_reader import BufferReader
+from ..buffer_io.file_buffer import FileBuffer
+from ..buffer_io.buffer_writer import BufferWriter
+from ..buffer_io.string_buffer import StringBuffer
 
 
 class File:

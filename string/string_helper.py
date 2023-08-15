@@ -1,5 +1,6 @@
-from buffer_io import (BufferReader, StringBuffer)
 
+from ..buffer_io.buffer_reader import BufferReader
+from ..buffer_io.string_buffer import StringBuffer
 
 class StringHelper:
     @staticmethod
