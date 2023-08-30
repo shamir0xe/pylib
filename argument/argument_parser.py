@@ -18,7 +18,7 @@ class ArgumentParser:
 
     def __pre_process(self) -> None:
         last_opt = ""
-        values = []
+        values: list = []
         for temp in self.buff:
             if self.__is_option(temp):
                 if last_opt != "":
@@ -39,7 +39,7 @@ class ArgumentParser:
         return len(candidate) > 0 and candidate.startswith(self.prefix)
 
     @staticmethod
-    def get_options() -> list:
+    def get_options() -> dict:
         return ArgumentParser().options
 
     @staticmethod
@@ -51,6 +51,6 @@ class ArgumentParser:
     def get_value(option: str, **kwargs) -> Optional[tuple]:
         parser = ArgumentParser(**kwargs)
         options = parser.options
-        if not option in options or len(options[option]) == 0:
+        if option not in options or len(options[option]) == 0:
             return None
         return tuple(options[option])

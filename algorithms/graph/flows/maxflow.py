@@ -13,16 +13,16 @@ class MaxFlow:
         self,
         n: int,
         random_order: bool = False,
-        order: list = None,
+        order: list|None = None,
         algorithm=MaxFlowAlgorithm.BFS,
     ):
         self.n = n
-        self.cap = [[0 for _ in range(n)] for _ in range(n)]
+        self.cap: list[list[int]] = [[0 for _ in range(n)] for _ in range(n)]
         self.order = [i for i in range(n)]
         self.algorithm = algorithm
         if random_order:
             random.shuffle(self.order)
-        if not order is None:
+        if order is not None:
             last = len(order)
             rest = [i for i in range(last, n)]
             if random_order:
@@ -42,8 +42,8 @@ class MaxFlow:
 
     def find_path_dfs(self, u, v):
         uu, vv = u, v
-        par = [-1 for i in range(self.n)]
-        cur_flow = [0 for i in range(self.n)]
+        par = [-1 for _ in range(self.n)]
+        cur_flow = [0 for _ in range(self.n)]
 
         def func(u):
             nonlocal uu, vv, par
