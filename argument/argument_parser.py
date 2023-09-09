@@ -1,34 +1,33 @@
 import sys
 from typing import Optional
-from ..data.variable_type_modifier import VariableTypeModifier
 
 
 class ArgumentParser:
     def __init__(self, index=1, option_prefix="-"):
         """
         Args:
-        index (int, optional): [index where to start reading sys.argv]. Defaults to 1.
-        option_prefix (str, optional): [the character that specifies an option]. Defaults to '-'.
+            index (int, optional): [index where to start reading
+                sys.argv]. Defaults to 1.
+            option_prefix (str, optional): [the character that specifies
+                an option]. Defaults to '-'.
         """
         self.buff = sys.argv[index:]
         self.prefix = option_prefix
         self.options = {}
-
         self.__pre_process()
 
     def __pre_process(self) -> None:
         last_opt = ""
-        values: list = []
+        values: list[str] = []
         for temp in self.buff:
             if self.__is_option(temp):
                 if last_opt != "":
-                    self.options[last_opt] = values
+                    self.options[last_opt] = " ".join(values)
                 last_opt, values = (self.__trim(temp), [])
             else:
-                temp = VariableTypeModifier(temp).cast_int().cast_float().get()
-                values.append(temp)
+                values.append(str(temp))
         if last_opt != "":
-            self.options[last_opt] = values
+            self.options[last_opt] = " ".join(values)
 
     def __trim(self, opt: str) -> str:
         while opt.startswith(self.prefix):
@@ -39,18 +38,16 @@ class ArgumentParser:
         return len(candidate) > 0 and candidate.startswith(self.prefix)
 
     @staticmethod
-    def get_options() -> dict:
+    def get_options() -> dict[str, str]:
         return ArgumentParser().options
 
     @staticmethod
     def is_option(option: str, **kwargs) -> bool:
-        parser = ArgumentParser(**kwargs)
-        return option in parser.options
+        return option in ArgumentParser(**kwargs).options
 
     @staticmethod
-    def get_value(option: str, **kwargs) -> Optional[tuple]:
-        parser = ArgumentParser(**kwargs)
-        options = parser.options
+    def get_value(option: str, **kwargs) -> Optional[str]:
+        options = ArgumentParser(**kwargs).options
         if option not in options or len(options[option]) == 0:
             return None
-        return tuple(options[option])
+        return options[option]

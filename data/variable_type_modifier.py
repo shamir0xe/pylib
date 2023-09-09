@@ -13,7 +13,7 @@ class VariableTypeModifier:
         try:
             self.var = int(self.var)
             self.status = True
-        except:
+        except Exception:
             pass
         return self
 
@@ -23,7 +23,7 @@ class VariableTypeModifier:
         try:
             self.var = float(self.var)
             self.status = True
-        except:
+        except Exception:
             pass
         return self
    
