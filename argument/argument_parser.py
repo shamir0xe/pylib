@@ -31,15 +31,15 @@ class ArgumentParser:
 
     def __trim(self, opt: str) -> str:
         while opt.startswith(self.prefix):
-            opt = opt[1:]
+            opt = opt[len(self.prefix):]
         return opt
 
     def __is_option(self, candidate: str) -> bool:
         return len(candidate) > 0 and candidate.startswith(self.prefix)
 
     @staticmethod
-    def get_options() -> dict[str, str]:
-        return ArgumentParser().options
+    def get_options(**kwargs) -> dict[str, str]:
+        return ArgumentParser(**kwargs).options
 
     @staticmethod
     def is_option(option: str, **kwargs) -> bool:
