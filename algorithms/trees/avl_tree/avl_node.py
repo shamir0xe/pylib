@@ -1,90 +1,41 @@
-from helpers.string.hash_generator import (HashGenerator)
-
 class AvlNode:
-	def __init__(self, objective=None):
-		self.__value = objective
-		self.__height = 1
-		self.__size = 1
-		self.__parent = self.__left = self.__right = None
-		self.__hash = HashGenerator().generate(5)
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+        self.height = 1
 
-	def set_value(self, value):
-		self.__value = value
+    def __lt__(self, other):
+        return self.value < other.value
 
-	def set_right(self, node):
-		if not node is None:
-			node.set_par(self)
-		self.__right = node
+    def update_height(self):
+        left_height = self.left.height if self.left else 0
+        right_height = self.right.height if self.right else 0
+        self.height = max(left_height, right_height) + 1
 
-	def set_left(self, node):
-		if not node is None:
-			node.set_par(self)
-		self.__left = node
+    def get_balance_factor(self):
+        left_height = self.left.height if self.left else 0
+        right_height = self.right.height if self.right else 0
+        return left_height - right_height
 
-	def set_par(self, node):
-		self.__parent = node
+    def rotate_right(self):
+        x = self.left
+        t_2 = x.right
+        x.right = self
+        self.left = t_2
+        self.update_height()
+        x.update_height()
+        return x
 
-	def set_hash(self, node_hash):
-		self.__hash = node_hash
+    def rotate_left(self):
+        y = self.right
+        t_2 = y.left
+        y.left = self
+        self.right = t_2
+        self.update_height()
+        y.update_height()
+        return y
 
-	def get_balance(self):
-		left_height = 0
-		if not self.__left is None:
-			left_height = self.__left.get_height()
-		right_height = 0
-		if not self.__right is None:
-			right_height = self.__right.get_height()
-		return left_height - right_height
-
-	def get_left(self):
-		return self.__left
-
-	def get_right(self):
-		return self.__right
-
-	def get_value(self):
-		return self.__value
-
-	def get_hash(self):
-		return self.__hash
-
-	def get_size(self):
-		return self.__size
-
-	def __str__(self):
-		return "val: [{}], par: [{}], sz: [{}], h: [{}], hash: [{}]".format(
-			self.__value, self.__parent, self.__size, self.__height, self.__hash)
-
-	def get_height(self):
-		if self.__value is None:
-			return 0
-		return self.__height
-
-	def update_height(self):
-		self.__height = 1
-		maxi = 0
-		if self.__left:
-			maxi = max(maxi, self.__left.get_height())
-		if self.__right:
-			maxi = max(maxi, self.__right.get_height())
-		self.__height += maxi
-
-	def update_size(self):
-		self.__size = 1
-		if self.__left:
-			self.__size += self.__left.get_size()
-		if self.__right:
-			self.__size += self.__right.get_size()
-
-	def update(self):
-		self.update_height()
-		self.update_size()
-
-	def __eq__(self, other):
-		if self.__value == other.get_value():
-			return self.__hash == other.get_hash()
-		return False
-
-	def __lt__(self, other):
-		return self.__value < other.get_value()
+    def __repr__(self):
+        return str(self.value)
 

@@ -33,7 +33,7 @@ class File:
         reader = BufferReader(FileBuffer(directory))
         first = True
         res, keys = [], []
-        while not reader.end_of_file():
+        while not reader.end_of_buffer():
             line = reader.next_line()
             line = line.replace(",", ", ")
             line_reader = BufferReader(

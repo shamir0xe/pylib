@@ -32,7 +32,7 @@ class MST:
                 if u == v:
                     continue
                 cost_prim = self.__adj[u][v]
-                if cost_prim < costs[v] and not v in alive:
+                if cost_prim < costs[v] and v not in alive:
                     costs[v] = cost_prim
                     pars[v] = u
                     q.put((-cost_prim, v))

@@ -23,8 +23,6 @@ class BufferWriter:
     def flush(self):
         flushed = self.__inner_writer
         self.__buffer.flush()
-        # self.__buffer.write(self.__inner_writer)
-        # self.__inner_writer = ""
         return flushed
 
     def close(self) -> BufferWriter:

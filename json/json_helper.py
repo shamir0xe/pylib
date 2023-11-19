@@ -17,12 +17,12 @@ class JsonHelper:
                     else:
                         res[key] = value
                 elif isinstance(value, dict):
-                    res[key] = JsonParser.merge(js_1[key], value)
+                    res[key] = JsonHelper.merge(js_1[key], value)
                 else:
                     res[key] = value
             else:
                 res[key] = value
-            if not key in res:
+            if key not in res:
                 res[key] = value
         return res
 
@@ -159,10 +159,10 @@ class JsonParser:
                 walker = walker[tokens[i - 1]][index]
             else:
                 if i + 1 < len(tokens) and self.__is_array(tokens[i + 1]) >= 0:
-                    if not token in walker:
+                    if token not in walker:
                         walker[token] = []
                 else:
-                    if not token in walker:
+                    if token not in walker:
                         walker[token] = {}
                     if i + 1 >= len(tokens):
                         walker[token] = obj

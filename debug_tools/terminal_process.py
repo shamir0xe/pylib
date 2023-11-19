@@ -16,7 +16,7 @@ class TerminalProcess:
             total       - Required  : total iterations (Int)
             prefix      - Optional  : prefix string (Str)
             suffix      - Optional  : suffix string (Str)
-            decimals    - Optional  : positive number of decimals in percent complete (Int)
+            decimals    - Optional  : positive number of decimals (Int)
             length      - Optional  : character length of bar (Int)
             fill        - Optional  : bar fill character (Str)
             printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
@@ -47,4 +47,3 @@ class TerminalProcess:
 
     def clear(self):
         self.iteration = 0
-

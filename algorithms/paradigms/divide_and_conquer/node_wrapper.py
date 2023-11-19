@@ -1,5 +1,5 @@
 class NodeWrapper:
-    def __init__(self, obj: any, point: tuple):
+    def __init__(self, obj, point: tuple):
         self.point = point
         self.obj = obj
 

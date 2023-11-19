@@ -1,7 +1,8 @@
 from __future__ import annotations
 import math
 import random
-from buffer_io import BufferReader, StringBuffer
+from buffer_io.string_buffer import StringBuffer
+from buffer_io.buffer_reader import BufferReader
 
 
 class Geometry:
@@ -23,7 +24,7 @@ class Geometry:
         operators = [".", "*", "*.", "+", "-"]
 
         def parse_point(p):
-            if type(p) is str:
+            if isinstance(p, str):
                 index = "".join("".join(p.split("[")).split("]"))
                 index = int(index)
                 return points[index]
@@ -176,11 +177,11 @@ class Geometry:
             return math.sqrt(self.x * self.x + self.y * self.y)
 
         def normalize(self):
-            l = self.length()
-            if l < Geometry.EPS:
+            length = self.length()
+            if length < Geometry.EPS:
                 return -1
-            self.x /= l
-            self.y /= l
+            self.x /= length
+            self.y /= length
             return 0
 
         def __lt__(self, other):

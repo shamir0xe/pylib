@@ -13,7 +13,7 @@ class MaxFlow:
         self,
         n: int,
         random_order: bool = False,
-        order: list|None = None,
+        order: list | None = None,
         algorithm=MaxFlowAlgorithm.BFS,
     ):
         self.n = n
@@ -60,7 +60,7 @@ class MaxFlow:
             return 0, []
 
         par[u] = -2
-        cur_flow[u] = 1e20
+        cur_flow[u] = int(1e20)
         return func(u)
 
     def find_path(self, u, v):
@@ -69,7 +69,7 @@ class MaxFlow:
         uu = u
         vv = v
 
-        par = [-1 for i in range(self.n)]
+        par = [-1 for _ in range(self.n)]
         queue.put((u, 1e20))
         visited[u] = True
         while not queue.empty():
@@ -94,10 +94,8 @@ class MaxFlow:
                 f, path = self.find_path_dfs(source, sink)
             else:
                 raise Exception("you must specify a correct algorithm for max-flow")
-
             if f == 0:
                 break
-
             flow += f
             for pair in path:
                 u, v = pair

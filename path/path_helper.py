@@ -3,6 +3,7 @@ import os
 
 DEFAULT_BACKWARD_TIMES = 3
 
+
 class PathHelper:
     @staticmethod
     def root_path(backward_times: int) -> str:
@@ -15,7 +16,7 @@ class PathHelper:
     @staticmethod
     def from_root(*path, **kwargs) -> str:
         """
-        assuming the arcitecture is like src/libs/pylib, 
+        assuming the arcitecture is like src/libs/pylib,
         then depth should be 3
         """
         backward_times = DEFAULT_BACKWARD_TIMES
