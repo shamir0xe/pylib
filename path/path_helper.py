@@ -1,27 +1,32 @@
 import os
+from dataclasses import dataclass
 
 
-DEFAULT_BACKWARD_TIMES = 3
-
-
+@dataclass
 class PathHelper:
-    @staticmethod
-    def root_path(backward_times: int) -> str:
-        path = os.path.dirname(os.path.abspath(__file__))
-        while backward_times > 0:
-            backward_times -= 1
-            path = os.path.join(path, "..")
-        return path
+    root_names: list[str] = ["src", "root"]
+
+    def root_path(self) -> str:
+        path = os.path.normpath(os.path.abspath(__file__))
+        while str(os.path.dirname(path)) not in self.root_names:
+            try:
+                path = os.path.join(path, "..")
+            except Exception:
+                break
+        res = ""
+        try:
+            res = os.path.normpath(os.path.join(path, ".."))
+        except Exception:
+            pass
+        return res
 
     @staticmethod
     def from_root(*path, **kwargs) -> str:
         """
-        assuming the arcitecture is like src/libs/pylib,
-        then depth should be 3
+        assuming the arcitecture is like src/... or root/...,
+        it'll go back till reach {src, root} folders
         """
-        backward_times = DEFAULT_BACKWARD_TIMES
-        if "backward_times" in kwargs:
-            backward_times = kwargs["backward_times"]
-        return os.path.normpath(
-            os.path.join(PathHelper.root_path(backward_times), *path)
-        )
+        instance = PathHelper()
+        if "root_name" in kwargs:
+            instance = PathHelper([kwargs["root_name"]])
+        return os.path.normpath(os.path.join(instance.root_path(), *path))

@@ -1,24 +1,27 @@
 from __future__ import annotations
-from typing import TypeVar
-
-T = TypeVar("T", bound="DataTransferObject")
+from dataclasses import asdict, dataclass, fields
 
 
+@dataclass
 class DataTransferObject:
     def __init__(self, **kwargs) -> None:
         self.__dict__ = kwargs
 
+    @classmethod
     def from_dict(
-        self: T,
+        cls,
         obj: dict,
-    ) -> T:
-        for key, _ in self.__dict__.items():
-            if key in obj:
-                data = obj[key]
-                if hasattr(self, f"{key}_mapper"):
-                    data = getattr(self, f"{key}_mapper")(data)
-                setattr(self, key, data)
-        return self
+    ):
+        res: dict = {}
+        field_names = [field.name for field in fields(cls)]
+        for key, value in obj.items():
+            if key in field_names:
+                res[key] = value
+        dto = cls(**res)
+        for key, value in dto.__dict__.items():
+            if hasattr(dto, f"{key}_mapper"):
+                setattr(dto, key, getattr(dto, f"{key}_mapper")(value))
+        return dto
 
     def __str__(self) -> str:
         res = ""
@@ -33,4 +36,4 @@ class DataTransferObject:
             setattr(self, key, value)
 
     def to_dict(self) -> dict:
-        return self.__dict__
+        return asdict(self)

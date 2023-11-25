@@ -4,7 +4,7 @@ import sys
 def debug_text(*texts):
     """ "
     the function for printing debug text into stderr
-    usage: 
+    usage:
         use % for extra arguments inside the string
     """
     colors = {
@@ -22,7 +22,7 @@ def debug_text(*texts):
     sz = len(texts)
     i = 0
     while i < sz:
-        if type(texts[i]) is str:
+        if isinstance(texts[i], str):
             res = ""
             count = 0
             j = 0

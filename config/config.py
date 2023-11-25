@@ -4,23 +4,16 @@ from ..path.path_helper import PathHelper
 from ..json.json_helper import JsonHelper
 
 
-DEFAULT_BACKWARD_TIMES = 3
-DEFAULT_CONFIG_FOLDER_NAME = "configs"
-
-
 class Config:
+    DEFAULT_CONFIG_FOLDER_NAME = "configs"
+
     def __init__(
         self,
         filename: str,
-        backward_times: int = DEFAULT_BACKWARD_TIMES,
         config_folder_name: str = DEFAULT_CONFIG_FOLDER_NAME,
     ) -> None:
         filename += ".json"
-        self.json = File.read_json(
-            PathHelper.from_root(
-                config_folder_name, filename, backward_times=backward_times
-            )
-        )
+        self.json = File.read_json(PathHelper.from_root(config_folder_name, filename))
 
     def get(self, selector: str = "", default: Any = None) -> Any:
         value = JsonHelper.selector_get_value(self.json, selector)

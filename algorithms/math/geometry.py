@@ -1,8 +1,8 @@
 from __future__ import annotations
 import math
 import random
-from buffer_io.string_buffer import StringBuffer
-from buffer_io.buffer_reader import BufferReader
+from ...buffer_io.string_buffer import StringBuffer
+from ...buffer_io.buffer_reader import BufferReader
 
 
 class Geometry:
