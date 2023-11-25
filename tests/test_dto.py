@@ -2,7 +2,7 @@ import unittest
 import random
 from ..data.data_transfer_object import DataTransferObject
 from ..string.hash_generator import HashGenerator
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
