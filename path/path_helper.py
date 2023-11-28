@@ -1,16 +1,20 @@
 import os
-from dataclasses import dataclass
+import sys
+from dataclasses import dataclass, field
 
 
 @dataclass
 class PathHelper:
-    root_names: list[str] = ["src", "root"]
+    root_names: list[str] = field(default_factory=lambda: ["src", "root"])
 
     def root_path(self) -> str:
-        path = os.path.normpath(os.path.abspath(__file__))
-        while str(os.path.dirname(path)) not in self.root_names:
+        path = os.path.normpath(os.path.abspath(sys.argv[0]))
+        while os.path.basename(path) not in self.root_names:
             try:
-                path = os.path.join(path, "..")
+                bef = path
+                path = os.path.normpath(os.path.join(path, ".."))
+                if path == bef:
+                    break
             except Exception:
                 break
         res = ""

@@ -1,3 +1,11 @@
+"""
+ATTENTION:
+    this is not my code! I've forgot where did I found this,
+    if someone knew please DM me to mention him in my code,
+    cheers.
+"""
+
+
 class TerminalProcess:
     def __init__(
         self,
@@ -40,8 +48,7 @@ class TerminalProcess:
         )
         filledLength = int(self.length * self.iteration // self.total)
         bar = self.fill * filledLength + "-" * (self.length - filledLength)
-        print(f"\r{self.prefix} |{bar}| {percent}% {self.suffix}", end=self.print_end)
-        # Print New Line on Complete
+        print(f"\r{self.prefix}|{bar}|{percent}% {self.suffix}", end=self.print_end)
         if self.iteration == self.total:
             print()
 
