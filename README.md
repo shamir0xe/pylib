@@ -178,8 +178,8 @@ path = PathHelper.from_root('assets', 'imgs', '1.png')
   `$project_root/assets/imgs/1.png`.
   This function tries to go back from current directory to reach the `root`
   directory. The defaults root directories are `src` and `root`. You can
-  specify the root dir name by passing the `root_name=YOUR_ROOT_DIR_NAME` by
-  passing it as kwarg.
+  specify the root dir name by passing the `root_name=YOUR_ROOT_DIR_NAME`
+  as a kwarg.
   Then the above example could be rewritten as something like this:
 
 ```python
