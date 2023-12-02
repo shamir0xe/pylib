@@ -170,21 +170,35 @@ Provides absolute pathing for the project. Then you can
 use releative pathing after reaching the project root. As an example:
 
 ```python
-path = PathHelper.from_root('assets', 'imgs', '1.png')
+path = PathHelper.from_root(__file__, 'assets', 'imgs', '1.png')
 ```
 
   It will construct the path from the root of the project to the desired file,
   for this specific example, the file should be accessible under this path:
   `$project_root/assets/imgs/1.png`.
-  This function tries to go back from current directory to reach the `root`
-  directory. The defaults root directories are `src` and `root`. You can
-  specify the root dir name by passing the `root_name=YOUR_ROOT_DIR_NAME`
+  This function tries to go back from `__file__` directory to reach the `root`
+  directory. The default root directories are `src` and `root`. You can
+  specify the root directory name by passing the `root_name=YOUR_ROOT_DIR_NAME`
   as a kwarg.
   Then the above example could be rewritten as something like this:
 
 ```python
 path = PathHelper.from_root(..., root_name="custom_name")
 ```
+
+The best practice to use it with custom root directory is to write a new PathHelper
+  class that extends this class and apply your custom `root_name` to it. It should
+be implemented like this:
+
+  ```python
+  from pylib_0xe.path.path_helper import PathHelper as PH
+
+
+  class PathHelper(PH):
+    @classmethod
+    def from_root(cls, *path: str) -> str:
+      return cls.from_root(__file__, *path, root_name="custom_name")
+  ```
 
 ### Argument
 
