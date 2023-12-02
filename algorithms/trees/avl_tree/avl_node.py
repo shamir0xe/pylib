@@ -20,20 +20,26 @@ class AvlNode:
 
     def rotate_right(self):
         x = self.left
-        t_2 = x.right
-        x.right = self
+        t_2 = None
+        if x:
+            t_2 = x.right
+            x.right = self
         self.left = t_2
         self.update_height()
-        x.update_height()
+        if x:
+            x.update_height()
         return x
 
     def rotate_left(self):
         y = self.right
-        t_2 = y.left
-        y.left = self
+        t_2 = None
+        if y:
+            t_2 = y.left
+            y.left = self
         self.right = t_2
         self.update_height()
-        y.update_height()
+        if y:
+            y.update_height()
         return y
 
     def __repr__(self):
