@@ -7,7 +7,7 @@ class TestPath(unittest.TestCase):
         return super().setUp()
 
     def test_backward_steps(self):
-        print(PathHelper.from_root())
+        print(PathHelper.from_root(__file__))
         self.assertTrue(1)
 
 

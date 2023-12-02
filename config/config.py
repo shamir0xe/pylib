@@ -13,7 +13,9 @@ class Config:
         config_folder_name: str = DEFAULT_CONFIG_FOLDER_NAME,
     ) -> None:
         filename += ".json"
-        self.json = File.read_json(PathHelper.from_root(config_folder_name, filename))
+        self.json = File.read_json(
+            PathHelper.from_root(__file__, config_folder_name, filename)
+        )
 
     def get(self, selector: str = "", default: Any = None) -> Any:
         value = JsonHelper.selector_get_value(self.json, selector)
