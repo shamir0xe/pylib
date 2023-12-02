@@ -3,11 +3,8 @@ from ..path.path_helper import PathHelper
 
 
 class TestPath(unittest.TestCase):
-    def setUp(self) -> None:
-        return super().setUp()
-
     def test_backward_steps(self):
-        print(PathHelper.from_root(__file__))
+        print(PathHelper.from_root(__file__, root_name="tests"))
         self.assertTrue(1)
 
 
