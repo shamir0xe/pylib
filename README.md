@@ -53,13 +53,14 @@ You can define `file`, `str` and `standard-input` buffers.
 - [BufferReader](buffer_io/buffer_reader.py)
 - [BufferWriter](buffer_io/buffer_writer.py)
 - [StandardInputBuffer](buffer_io/standard_input_buffer.py)
+- [StandardOutputBuffer](buffer_io/standard_output_buffer.py)
 - [FileBuffer](buffer_io/file_buffer.py)
 - [StringBuffer](buffer_io/string_buffer.py)
 
 for example you can simply read a whole file like this:
 
 ```python
-reader = BufferReader(FileBuffer(file_path))
+reader = BufferReader(FileBuffer(file_path, "r+"))
 while not reader.end_of_buffer():
     line = reader.next_line()
 ```
@@ -72,6 +73,17 @@ while not reader.end_of_buffer():
     a, b, c = reader.next_int(), reader.next_string(), reader.next_char()
 ```
 
+you can also read from `standard_input` and write to `standard_output`
+in this way:
+
+```python
+reader = BufferReader(StandardInputBuffer())
+writer = BufferWriter(StandardOutputBuffer())
+while not reader.end_of_buffer():
+    a, b, c = reader.next_int(), reader.next_string(), reader.next_char()
+    writer.write_line(f"We have recieved these: ({a}, {b}, {c})")
+```
+
 ### Data
 
 - [DataTransferObject](data/data_transfer_object.py):
@@ -82,6 +94,48 @@ A tool for converting dictionaries to objects. example:
  print(obj.a)
 #  123
  ```
+
+DataTransferObject is a dataclass itself. The best practice to use
+this dto class is inheritting it as the base
+class for your model. For example If your new model is named Bob and
+has two parameters `name` and `height` with types `str` and `Optional[int]`
+respectively, it should be implemented like this:
+
+```python
+@dataclass
+class Bob(DataTransferObject):
+  name: str
+  height: int | None = 185
+```
+
+and then you can instantiate it in this way:
+
+```python
+  bob_marley = Bob({name: "Bob Marley"})
+```
+
+and you can use `bob_marley.name` and `bob_marley.height` in your code
+since now on.
+Another cool feature of this dto is implementing `mapper` function for
+any variable of your choice. It works this way that you can define a
+mapper function with this style: `VARIABLENAME_mapper`. It recieves
+it's argument from the dictionary you provided to instantiate it and convert
+the input to whatever you implement it in the function. This could be
+useful if the types of the input data differs from the expected type
+provided in the class or if you want to change the value of the variable
+in some way before creating it. For example if you want `Bob` to convert it's
+name to upper_case letters, it could be implemented like this:
+
+```python
+@dataclass
+class Bob(DataTransferObject):
+  name: str
+  height: int | None = 185
+
+  def name_mapper(name: str) -> str:
+    return name.lower()
+
+```
 
 - [VariableTypeModifier](data/variable_type_modifier.py):
 Converting types by casting it in a better way.
@@ -186,9 +240,10 @@ path = PathHelper.from_root(__file__, 'assets', 'imgs', '1.png')
 path = PathHelper.from_root(..., root_name="custom_name")
 ```
 
-The best practice to use it with custom root directory is to write a new PathHelper
-  class that extends this class and apply your custom `root_name` to it. It should
-be implemented like this:
+The best practice to use it with the custom root directory is to write a new PathHelper
+class that extends `PathHelper` and apply your custom `root_name` to it. You can
+also get rid of `__file__` argument in this way. It should be implemented
+something like this:
 
   ```python
   from pylib_0xe.path.path_helper import PathHelper as PH
@@ -196,7 +251,7 @@ be implemented like this:
 
   class PathHelper(PH):
     @classmethod
-    def from_root(cls, *path: str) -> str:
+    def root(cls, *path: str) -> str:
       return cls.from_root(__file__, *path, root_name="custom_name")
   ```
 
