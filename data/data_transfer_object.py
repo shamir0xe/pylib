@@ -21,8 +21,9 @@ class DataTransferObject:
         field_names = {field.name for field in fields(cls)}
         for key, value in obj.items():
             if key in field_names:
-                if f"{key}_mapper" in field_names:
-                    dto_kwargs[key] = getattr(cls, f"{key}_mapper")(value)
+                mapper_func = getattr(cls, f"{key}_mapper", None)
+                if callable(mapper_func):
+                    dto_kwargs[key] = mapper_func(value)
                 else:
                     dto_kwargs[key] = value
         dto = cls(**dto_kwargs)
