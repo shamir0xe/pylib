@@ -24,15 +24,17 @@ class PathHelper:
             pass
         return res
 
-    @classmethod
-    def from_root(cls, file_path: str, *path: str, **kwargs) -> str:
+    @staticmethod
+    def from_root(file_path: str, *path: str, **kwargs) -> str:
         """
         assuming the arcitecture is like src/... or root/...,
         it'll go back till reach {src, root} folders
         """
-        instance = PathHelper(file_path)
+        instance: PathHelper
         if "root_name" in kwargs:
             instance = PathHelper(file_path, [kwargs["root_name"]])
+        else:
+            instance = PathHelper(file_path)
         return os.path.normpath(os.path.join(instance.root_path(), *path))
 
     @staticmethod
