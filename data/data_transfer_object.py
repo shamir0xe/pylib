@@ -13,7 +13,7 @@ class DataTransferObject:
         self.__dict__ = kwargs
 
     @classmethod
-    def from_dict(cls, obj: Dict[str, Any]) -> DataTransferObject:
+    def from_dict(cls, obj: Dict[str, Any]):
         """
         Constructs an instance of the class from a dictionary.
         """
@@ -21,12 +21,11 @@ class DataTransferObject:
         field_names = {field.name for field in fields(cls)}
         for key, value in obj.items():
             if key in field_names:
-                dto_kwargs[key] = value
+                if f"{key}_mapper" in field_names:
+                    dto_kwargs[key] = getattr(cls, f"{key}_mapper")(value)
+                else:
+                    dto_kwargs[key] = value
         dto = cls(**dto_kwargs)
-        for key, value in dto.__dict__.items():
-            mapper_func = getattr(dto, f"{key}_mapper", None)
-            if mapper_func:
-                setattr(dto, key, mapper_func(value))
         return dto
 
     def __str__(self) -> str:
