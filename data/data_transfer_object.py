@@ -1,3 +1,9 @@
+"""
+ATTENTION:
+    DEPRECATED,
+    use pydantic
+"""
+
 from __future__ import annotations
 from dataclasses import asdict, dataclass, fields
 from typing import Any, Dict

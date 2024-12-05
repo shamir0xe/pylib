@@ -6,11 +6,14 @@ class HashGenerator:
     mother_size = len(mother_string)
 
     @staticmethod
-    def generate(length=5):
+    def generate(length: int = 5, upper_case_probability: float = 0.5):
         res = ""
         while length > 0:
             length -= 1
-            res += HashGenerator.mother_string[
+            char = HashGenerator.mother_string[
                 random.randint(0, HashGenerator.mother_size - 1)
             ]
+            if random.random() < upper_case_probability:
+                char = char.upper()
+            res += char
         return res

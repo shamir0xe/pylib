@@ -31,7 +31,7 @@ class ArgumentParser:
 
     def __trim(self, opt: str) -> str:
         while opt.startswith(self.prefix):
-            opt = opt[len(self.prefix):]
+            opt = opt[len(self.prefix) :]
         return opt
 
     def __is_option(self, candidate: str) -> bool:

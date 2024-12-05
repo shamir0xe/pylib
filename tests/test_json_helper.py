@@ -2,6 +2,7 @@ import unittest
 import random
 from ..json.json_helper import JsonHelper
 
+
 class TestJsonHelper(unittest.TestCase):
     def setUp(self):
         self.js = {"sdas": 123, "some_array": [{"a": 1}, {"b": "321"}]}
@@ -9,8 +10,9 @@ class TestJsonHelper(unittest.TestCase):
     def test_selector_set_value_star_array(self):
         random_value = random.randint(0, 12345677)
         next_js = JsonHelper.selector_set_value(self.js, "some_array.*.b", random_value)
-        bl = next_js["some_array"][0]["b"] == random_value
-        bl &= next_js["some_array"][1]["b"] == random_value
+        bl = next_js["some_array"][0]["b"] == random_value  # type:ignore
+        bl &= next_js["some_array"][1]["b"] == random_value  # type:ignore
+
         self.assertTrue(bl)
 
     def test_selector_set_value_index_array(self):
@@ -19,10 +21,12 @@ class TestJsonHelper(unittest.TestCase):
         next_js = JsonHelper.selector_set_value(
             self.js, "some_array.__{}.b".format(random_index), random_value
         )
-        bl = next_js["some_array"][random_index]["b"] == random_value
+        bl = next_js["some_array"][random_index]["b"] == random_value  # type:ignore
+
         bl &= (
-            not "b" in next_js["some_array"][1 - random_index]
-            or next_js["some_array"][1 - random_index]["b"] != random_value
+            not "b" in next_js["some_array"][1 - random_index]  # type:ignore
+            or next_js["some_array"][1 - random_index]["b"]  # type:ignore
+            != random_value
         )
         self.assertTrue(bl)
 
@@ -36,7 +40,9 @@ class TestJsonHelper(unittest.TestCase):
 
     def test_apply_structure_list(self):
         next_js = JsonHelper.apply_stucture(self.js, {"some_array.__1": []})
-        self.assertEqual(next_js["some_array"][1], [self.js["some_array"][1]])
+        self.assertEqual(
+            next_js["some_array"][1], [self.js["some_array"][1]]  # type:ignore
+        )
 
 
 if __name__ == "__main__":

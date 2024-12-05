@@ -1,3 +1,4 @@
+from typing import Any, Dict, Union
 from ..buffer_io.buffer_reader import BufferReader
 from ..buffer_io.string_buffer import StringBuffer
 
@@ -46,3 +47,21 @@ class StringHelper:
         if not first_capital:
             camel = camel[0].lower() + camel[1:]
         return camel
+
+    @staticmethod
+    def is_lowercase(string: str) -> bool:
+        for ch in string:
+            if ord("A") <= ord(ch) <= ord("Z"):
+                return False
+        return True
+
+    @staticmethod
+    def prettify_dictionary(
+        dictionary: Dict[str, Any]
+    ) -> Dict[str, Union[str, bool, float, int]]:
+        res = {}
+        for key, value in dictionary.items():
+            if type(value) not in [int, bool, str, float]:
+                value = str(value)
+            res[key] = value
+        return res
