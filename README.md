@@ -1,11 +1,10 @@
-
 <h1 align="center" style="display: block; font-size: 2.5em; font-weight: bold; margin-block-start: 1em; margin-block-end: 1em;">
 <a name="logo" href="#"><img align="center" src="https://github.com/shamir0xe/pylib/blob/main/assets/logos/pylib.png?raw=true" alt="pylib" style="width:100%;height:100%"/></a>
 <br/><br/><strong>pylib</strong>
 </h1>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Python](https://img.shields.io/badge/Python-3.6%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 A python library that helps writing py projects much easier and faster.
@@ -13,38 +12,248 @@ A python library that helps writing py projects much easier and faster.
 ## Table of contents
 
 This library covers multiple aspects, including:
+
 <!--toc:start-->
+
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
 - [Documentation](#documentation)
-  - [Buffer IO](#buffer-io)
-  - [Data](#data)
-  - [Debug Tools](#debug-tools)
-  - [Config](#config)
-  - [File](#file)
-  - [Json](#json)
-  - [Path](#path)
-  - [Argument](#argument)
-  - [String](#string)
-  - [Algorithms](#algorithms)
-    - [Graph](#graph)
-    - [Math](#math)
-    - [Paradigms](#paradigms)
-    - [String Processing](#string-processing)
-    - [Trees](#trees)
-<!--toc:end-->
+  - [I. Config](#i-config)
+    - [Usage Example](#usage-example)
+    - [Default Values](#default-values)
+    - [Reading Environment Configurations](#reading-environment-configurations)
+  - [II. Database](#ii-database)
+    - [Registering a Database Engine](#registering-a-database-engine)
+    - [Using Database Sessions](#using-database-sessions)
+    - [Using the Repository Facade](#using-the-repository-facade)
+  - [III. Rabbit-MQ Messaging](#iii-rabbit-mq-messaging)
+    - [Establishing an Async Connection](#establishing-an-async-connection)
+    - [Server Side: Listening to a Queue](#server-side-listening-to-a-queue)
+    - [Client Side: Sending Messages](#client-side-sending-messages)
+  - [IV. Json](#iv-json)
+  - [V. Buffer IO](#v-buffer-io)
+  - [VI. Data Structures](#vi-data-structures)
+  - [VII. File](#vii-file)
+  - [VIII. Path](#viii-path)
+  - [IX. Argument](#ix-argument)
+  - [X. String](#x-string)
+  - [XI. Math](#xi-math)
 
 ## Installation
 
-  You can simply install this library through pip, via following commad:
+You can simply install this library through pip, via following commad:
 
-  ```shell
+```shell
 python3 -m pip install pylib-0xe
-  ```
+```
 
 ## Documentation
 
-### Buffer IO
+### I. Config
+
+The [`Config`](config/config) facade simplifies reading hierarchical JSON config files. Here's how it works:
+
+#### Usage Example
+Assume you have several `.json` config files or folders with configurations under the `configs` directory. To access the `humans.male.height` attribute from `mammals.json`, use the following code:
+
+```python
+Config.read('mammals.humans.male.height')
+```
+
+#### Default Values
+You can specify a default value if the attribute is not found:
+
+```python
+Config.read(..., default=180)
+```
+
+#### Reading Environment Configurations
+The `read_env` property looks for an `env.json` file in the project's directory hierarchy. Once found, it searches for the specified pattern. For example, to access `db.postgres.password`, use:
+
+```python
+Config.read_env('db.postgres.password')
+```
+
+---
+
+### II. Database
+
+The `Database` facade provides convenient methods for interacting with databases using SQLAlchemy. Follow these steps to set it up:
+
+#### Registering a Database Engine
+First, register your database engine with the `EngineMediator`:
+
+```python
+from pylib_0xe.database.mediators.engine_mediator import EngineMediator
+from pylib_0xe.database.engines.postgres_engine import PostgresEngine
+
+# Register the Postgres engine
+EngineMediator().register(DatabaseTypes.I, PostgresEngine().engine)
+```
+
+This associates `DatabaseTypes.I` with the SQLAlchemy engine.
+
+> **Note:** Ensure your `env.json` contains the `db.postgres` configuration:
+
+```json
+{
+  "db": {
+    "postgres": {
+      "host": "127.0.0.1",
+      "port": 1234,
+      "user": "",
+      "password": "",
+      "db": "",
+      "test_db": ""
+    }
+  }
+}
+```
+
+---
+
+#### Using Database Sessions
+You can inject database sessions into functions using the `@db_session` decorator:
+
+```python
+from typing import Optional
+from sqlalchemy import Session
+from pylib_0xe.decorators.db_session import db_session
+from pylib_0xe.types.database_types import DatabaseTypes
+
+@db_session(DatabaseTypes.I)
+def fn(session: Optional[Session] = None):
+    session.query(...)
+```
+
+---
+
+#### Using the Repository Facade
+Alternatively, use the [`Repository`](repositories/repository.py) facade for simplified CRUD operations:
+
+```python
+from pylib_0xe.repositories.repository import Repository
+from src.models.user import User
+
+# 'User' should be a SQLAlchemy model inheriting from DecoratedBase
+# 'DecoratedBase' is located in pylib_0xe.database.decorated_base
+
+user = Repository(User).read_by_id("123456")
+```
+
+
+### III. Rabbit-MQ Messaging
+
+The `Messaging` facade simplifies creating robust RabbitMQ-based messaging projects. It consists of two main components:
+
+1. **Server Side**
+2. **Client Side**
+
+> **Note:** Ensure the `message_broker` section is included in your `env.json` file for full functionality:
+> ```json
+> {
+>   "message_broker": {
+>     "host": "127.0.0.1:5672",
+>     "url": "amqp://127.0.0.1:5672"
+>   }
+> }
+> ```
+
+Both server and client components support asynchronous and blocking connections. Below, we illustrate examples for the **asynchronous** connection.
+
+---
+
+#### Establishing an Async Connection
+Use the `inject_async_connection` decorator to create and inject an async RabbitMQ connection:
+
+```python
+from pylib_0xe.decorators.inject_async_connection import inject_async_connection
+from pylib_0xe.messaging.rpc.rpc_async_connection import RpcAsyncConnection
+
+@inject_async_connection
+def main(connection: Optional[RpcAsyncConnection] = None):
+    pass
+```
+
+This decorator creates an async connection and injects it into the `main` function.
+
+---
+
+#### Server Side: Listening to a Queue
+On the server side, create a RabbitMQ queue, listen to it, and invoke a callback function when a job is received:
+
+```python
+from pylib_0xe.messaging.rpc.rpc_async_server import RpcAsyncServer
+from pylib_0xe.asynchrone.get_or_create_event_loop import GetOrCreateEventLoop
+
+# Define the callback function
+def resolver(*args, **kwargs):
+    pass
+
+@inject_async_connection
+def main(connection: Optional[RpcAsyncConnection]):
+    # Create the server instance
+    RpcAsyncServer(
+        routing_key="some-random-q",
+        connection=connection,
+        query_handler=resolver,
+    )
+
+    # Start the event loop
+    GetOrCreateEventLoop().get_or_create().run_forever()
+```
+
+This setup ensures that the server listens for messages on the specified `routing_key` and processes them using the `resolver` function.
+
+---
+
+#### Client Side: Sending Messages
+On the client side, send a message to a specific queue using the `ClientCaller` class:
+
+```python
+from pylib_0xe.messaging.client.client_caller import ClientCaller
+
+async def fn():
+    return await ClientCaller(
+        client_name="some-random-q",
+        rpc_connection=connection,
+    ).call(input={"query": "generate", "payload": ...})
+```
+
+The `ClientCaller` sends a message to the `some-random-q` queue and waits for a response asynchronously.
+
+### IV. Json
+
+This facade class helps you operate `get` and `set` operations on a json file. Two main functions are:
+
+
+1)  [`selector_get_value`](json/json_helper.py)
+1)  [`selector_set_value`](json/json_helper.py)
+
+It supports selecting by array indexes (__i) and wild-cards (*) for both `set` and `get` methods.
+```json
+{
+  "a": {
+    "b": {
+      "c": {
+        "f": "g"
+      }
+    },
+    "d": [1, 2],
+    "e": {},
+    "f": [{"g": 123}, {"k": 3}]
+  }
+}
+```
+
+```python
+json_file = File.read_json('file.json')
+JsonHelper.selector_get_value(json_file, 'a.b.c.f') # g
+JsonHelper.selector_get_value(json_file, 'a.d') # [1, 2]
+JsonHelper.selector_set_value(json_file, 'a.f.*.r', 5) # "f": [{"g": 123, "r": 5}, {"k": 3, "r": 5}]
+JsonHelper.selector_set_value(json_file, 'a.d.__2', 5) # "d": [1, 5],
+```
+### V. Buffer IO
 
 This module provides several ways to read, write and edit buffers.
 You can define `file`, `str` and `standard-input` buffers.
@@ -84,157 +293,36 @@ while not reader.end_of_buffer():
     writer.write_line(f"We have recieved these: ({a}, {b}, {c})")
 ```
 
-### Data
-
-- [DataTransferObject](data/data_transfer_object.py):
-A tool for converting dictionaries to objects. example:
-
- ```python
- obj = DataTransferObject.from_dict({'a': 123})
- print(obj.a)
-#  123
- ```
-
-DataTransferObject is a dataclass itself. The best practice to use
-this dto class is inheritting it as the base
-class for your model. For example If your new model is named Bob and
-has two parameters `name` and `height` with types `str` and `Optional[int]`
-respectively, it should be implemented like this:
-
-```python
-@dataclass
-class Bob(DataTransferObject):
-  name: str
-  height: int | None = 185
-```
-
-and then you can instantiate it in this way:
-
-```python
-  bob_marley = Bob({name: "Bob Marley"})
-```
-
-and you can use `bob_marley.name` and `bob_marley.height` in your code
-since now on.
-Another cool feature of this dto is implementing `mapper` function for
-any variable of your choice. It works this way that you can define a
-mapper function with this style: `VARIABLENAME_mapper`. It recieves
-it's argument from the dictionary you provided to instantiate it and convert
-the input to whatever you implement it in the function. This could be
-useful if the types of the input data differs from the expected type
-provided in the class or if you want to change the value of the variable
-in some way before creating it. For example if you want `Bob` to convert it's
-name to upper_case letters, it could be implemented like this:
-
-```python
-@dataclass
-class Bob(DataTransferObject):
-  name: str
-  height: int | None = 185
-
-  def name_mapper(name: str) -> str:
-    return name.lower()
-
-```
-
-- [VariableTypeModifier](data/variable_type_modifier.py):
-Converting types by casting it in a better way.
-
-### Debug Tools
-
-- [debug_text](debug_tools/debug_text.py): Alternative way to debuging
-the code via prints into the stderr. example:
-
-```python
-debug_text('%B%USome Object%E [%c#%%E] -> %r%%E', 12, {"a": 34})
-```
-
-<pre>[<u style="text-decoration-style:single"><b>Some Object</b></u> [<font color="#34E2E2">#12</font>] -&gt; <font color="#EF2929">{&apos;a&apos;: 34}</font>]</pre>
-
-- list of options:
-  1. %c: cyan color
-  1. %r: red color
-  1. %b: blue color
-  1. %g: green color
-  1. %y: yellow color
-  1. %H: alternative color
-  1. %B: bold text
-  1. %U: underlined text
-  1. %E: clear modifiers
-
-- [TerminalProcess](debug_tools/terminal_process.py):
-A neat progress bar for long tasks.
-
-### Config
-
-- [Config](config/config.py): A facade class to read
-json config files easily. I'ts so powerful when you
-provide your configs in the hierarchical pattern.
-example usage:
-under the `configs` folder, you have several .json config files,
-or folders containing configs. Let's assume we want to access
-`humans.male.height` attribute from `mammals.json`.
-We have two approaches to achieve it:
-    1. `Config('mammals').get('humans.male.height)`
-    2. `Config.read('mammals.humans.male.height)`
-
-  It could have default value if there is no correspond
-  attribute was found. like we could have written
-  `Config.read(..., default=180)`
-
-### File
+### VI. Data Structures
+### VII. File
 
 - [File](file/file.py): A class that contains some useful
-functions to deal with files. Some of them are:
+  functions to deal with files. Some of them are:
   - `read_json(file_path)`
   - `read_csv(file_path)`
   - `append_to_file(file_path, string)`
   - `get_all_files(directory_path, extension)`
 
-### Json
 
-- [JsonHelper](json/json_helper.py): With this class, you can read,
-write and merge `json` files with dot notations.
-Selector example (for `file.json`):
 
-```json
-{
-    "a": {
-        "b": {
-            "c": {
-                "f": "g"
-            }
-        },
-        "d": [1, 2],
-        "e": {}
-    }
-}
-```
-
-```python
-json_file = File.read_json('file.json')
-JsonHelper.selector_get_value(json_file, 'a.b.c.f') # g
-JsonHelper.selector_get_value(json_file, 'a.d') # [1, 2]
-```
-
-### Path
+### VIII. Path
 
 - [PathHelper](path/path_helper.py):
-Provides absolute pathing for the project. Then you can
-use releative pathing after reaching the project root. As an example:
+  Provides absolute pathing for the project. Then you can
+  use releative pathing after reaching the project root. As an example:
 
 ```python
 path = PathHelper.from_root(__file__, 'assets', 'imgs', '1.png')
 ```
 
-  It will construct the path from the root of the project to the desired file,
-  for this specific example, the file should be accessible under this path:
-  `$project_root/assets/imgs/1.png`.
-  This function tries to go back from `__file__` directory to reach the `root`
-  directory. The default root directories are `src` and `root`. You can
-  specify the root directory name by passing the `root_name=YOUR_ROOT_DIR_NAME`
-  as a kwarg.
-  Then the above example could be rewritten as something like this:
+It will construct the path from the root of the project to the desired file,
+for this specific example, the file should be accessible under this path:
+`$project_root/assets/imgs/1.png`.
+This function tries to go back from `__file__` directory to reach the `root`
+directory. The default root directories are `src` and `root`. You can
+specify the root directory name by passing the `root_name=YOUR_ROOT_DIR_NAME`
+as a kwarg.
+Then the above example could be rewritten as something like this:
 
 ```python
 path = PathHelper.from_root(..., root_name="custom_name")
@@ -245,21 +333,21 @@ class that extends `PathHelper` and apply your custom `root_name` to it. You can
 also get rid of `__file__` argument in this way. It should be implemented
 something like this:
 
-  ```python
-  from pylib_0xe.path.path_helper import PathHelper as PH
+```python
+from pylib_0xe.path.path_helper import PathHelper as PH
 
 
-  class PathHelper(PH):
-    @classmethod
-    def root(cls, *path: str) -> str:
-      return cls.from_root(__file__, *path, root_name="custom_name")
-  ```
+class PathHelper(PH):
+  @classmethod
+  def root(cls, *path: str) -> str:
+    return cls.from_root(__file__, *path, root_name="custom_name")
+```
 
-### Argument
+### IX. Argument
 
 - [ArgumentParser](argument/argument_parser.py):
-Useful tool to reading arguments passed to a python program executed via command line interface (terminal).
-for example if you run your program as follow:
+  Useful tool to reading arguments passed to a python program executed via command line interface (terminal).
+  for example if you run your program as follow:
 
 ```terminal
 python3 main.py --color green --size 2 --fast --O2
@@ -273,40 +361,21 @@ ArgumentParser.get_value('size') -> 2
 ArgumentParser.is_option('O2') -> true
 ```
 
-### String
+### X. String
 
 - [StringHelper](string/string_helper.py)
 - [HashGenerator](string/hash_generator.py)
+- [GenerateId](string/generate_id.py)
 
-### Algorithms
 
-#### Graph
 
-- [flows](algorithms/graph/flows): provides algorithms in max-flow problem, including:
-  - [MaxFlow](algorithms/graph/flows/maxflow.py)
-- [MST](algorithms/graph/mst.py)
-- [TSP](algorithms/graph/tsp.py)
-
-#### Math
+### XI. Math
 
 - [Geometry](algorithms/math/geometry.py): A neat implemented 2d-geometry
-library. Some of the usefull functions that it provides are:
+  library. Some of the usefull functions that it provides are:
   - `translate(expression, *points)`: recieves arithmatic expression and
-  the points afterwards. Returns the answer of the expression. example:
+    the points afterwards. Returns the answer of the expression. example:
     `translate('* + *.', p1, p2, p3, scalar)` = `((p1 * p2) + p3) *. scalar`
   - `side_sign(p1, p2, p3)`: Returns in which side of the p1->p2 line, p3 is located.
   - `inside_polygon(points, p)`
   - `segment_intersection(l1, l2)`
-
-#### Paradigms
-
-- [DevideAndConquer](algorithms/paradigms/divide_and_conquer):
-Implementation of D&D algorithmic paradigm.
-
-#### String Processing
-
-- [LIS](algorithms/string_processing/lis.py): Longest Increasing Subsequence implementation.
-
-#### Trees
-
-- [AvlTree](algorithms/trees/avl_tree)
