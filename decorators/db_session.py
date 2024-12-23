@@ -23,7 +23,7 @@ def db_session(db: DatabaseTypes):
             try:
                 result = func(*args, **kwargs)
             except Exception as e:
-                if creation and not keep_alive:
+                if creation:
                     ReleaseSession(database=db, session=kwargs["session"]).release()
                 raise Exception(e)
             kwargs["session"].commit()
