@@ -1,9 +1,12 @@
 import functools
+import logging
 
 from ..asynchrone.get_lock import GetLock
 from ..database.actions.borrow_session import BorrowSession
 from ..database.actions.release_session import ReleaseSession
 from ..types.database_types import DatabaseTypes
+
+LOGGER = logging.getLogger(__name__)
 
 
 def db_session(db: DatabaseTypes):
@@ -23,6 +26,11 @@ def db_session(db: DatabaseTypes):
             try:
                 result = func(*args, **kwargs)
             except Exception as e:
+                try:
+                    LOGGER.info("Rolling transaction back")
+                    kwargs["session"].rollback()
+                except Exception as ee:
+                    LOGGER.info(f"During rollback, {str(ee)} occurred")
                 if creation:
                     ReleaseSession(database=db, session=kwargs["session"]).release()
                 raise Exception(e)
